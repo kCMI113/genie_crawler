@@ -51,6 +51,7 @@ def getSongInfo(song_list_wrap, setting: DictConfig) -> list[dict]:
 
 def getPlaylistInfo(id: int, link: str, setting: DictConfig, songs_list: list[dict]) -> dict:
     op = webdriver.ChromeOptions()
+    op.add_argument('--no-sandbox')
     op.add_argument("--headless")
 
     driver = webdriver.Chrome(options=op)

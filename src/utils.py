@@ -55,6 +55,7 @@ def resizeImg(path: str, size: int, max_size: int) -> str:
 
 def getLastPlaylistId(link: str) -> int:
     op = webdriver.ChromeOptions()
+    op.add_argument('--no-sandbox')
     op.add_argument("--headless")
 
     driver = webdriver.Chrome(options=op)
