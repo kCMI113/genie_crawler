@@ -1,0 +1,19 @@
+# url path of genie
+playlist_origin_url: https://www.genie.co.kr/playlist/popular?sortOrd=RDD
+playlist_url: https://www.genie.co.kr/playlist/detailView?plmSeq=
+
+# file path
+out_dir: outputs/
+log_dir: logs/
+
+# csv file name
+pl_filename: pl_info.csv
+song_filename: song_info.csv
+
+# img resize option
+is_resize: False
+img_resize: 140
+
+# retrival scope 
+start_idx: 15525
+end_idx: 15530

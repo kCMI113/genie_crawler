@@ -1,11 +1,13 @@
 import os
 import pandas as pd
+from datetime import datetime
+from omegaconf import DictConfig
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from datetime import datetime
 
 
-def createDirectory(dir: str):
+def createDirectory(dir: str) -> None:
     try:
         if not os.path.exists(dir):
             os.makedirs(dir)
@@ -14,30 +16,33 @@ def createDirectory(dir: str):
         print(f"[ERROR] Creating {path} is failed !!!")
 
 
-def setLogFile() -> str:
+def setLogFile(setting: DictConfig) -> str:
     # get Timestamp
     now = datetime.now()
     now = now.strftime("%m%d_%H%M")
 
+    # create log dir
+    createDirectory(setting.log_dir)
+
     # set path
     file_name = now + "_logs.txt"
-    out_dir = "logs/"
-    createDirectory(out_dir)
-    file_path = os.path.join(out_dir, file_name)
-
-    return file_path
+    log_path = os.path.join(setting.log_dir, file_name)
+    return log_path
 
 
-def saveSongs2Csv(songs_list: list[dict]) -> None:
-    # set path
-    file_name = "song_info.csv"
-    out_dir = "outputs/"
-    createDirectory(out_dir)
-    file_path = os.path.join(out_dir, file_name)
+def saveInfoDict2Csv(pl_list: list[dict], songs_list: list[dict], setting: DictConfig) -> None:
+    createDirectory(setting.out_dir)
 
-    # save csv
+    pl_path = os.path.join(setting.out_dir, setting.pl_filename)
+    song_path = os.path.join(setting.out_dir, setting.song_filename)
+
+    # save playlist csv
+    pl_df = pd.DataFrame(pl_list)
+    pl_df.to_csv(pl_path, index=False)
+
+    # save songs csv
     songs_df = pd.DataFrame(songs_list)
-    songs_df.to_csv(file_path, index=False)
+    songs_df.to_csv(song_path, index=False)
 
 
 def resizeImg(path: str, size: int = 140) -> str:

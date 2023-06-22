@@ -11,3 +11,4 @@ logs/
 # output dir and files
 outputs/
 *.csv
+*.json
