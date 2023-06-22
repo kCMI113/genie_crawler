@@ -50,7 +50,10 @@ def getSongInfo(song_list_wrap, setting: DictConfig) -> list[dict]:
 
 
 def getPlaylistInfo(id: int, link: str, setting: DictConfig, songs_list: list[dict]) -> dict:
-    driver = webdriver.Chrome()
+    op = webdriver.ChromeOptions()
+    op.add_argument("--headless")
+
+    driver = webdriver.Chrome(options=op)
     driver.get(url=link)
 
     playlist_info = driver.find_element(By.CLASS_NAME, "playlist-info")
