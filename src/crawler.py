@@ -49,7 +49,7 @@ def getSongInfo(song_list_wrap, setting: DictConfig) -> list[dict]:
     return songs
 
 
-def getPlaylistInfo(link: str, setting: DictConfig, songs_list: list[dict]) -> dict:
+def getPlaylistInfo(id: int, link: str, setting: DictConfig, songs_list: list[dict]) -> dict:
     driver = webdriver.Chrome()
     driver.get(url=link)
 
@@ -96,11 +96,12 @@ def getPlaylistInfo(link: str, setting: DictConfig, songs_list: list[dict]) -> d
     song_list_wrap = driver.find_element(By.CLASS_NAME, "music-list-wrap")
     song_info = getSongInfo(song_list_wrap, setting)
     songs_list += song_info
-    print("--------------len of songs_list : %d --------------", len(songs_list))
+    print(f"--------------len of songs_list : {len(songs_list)} --------------")
 
     song_ids = [song["SONG_ID"] for song in song_info]
 
     info = {
+        "PLAYLIST_ID": str(id),
         "PLAYLIST_TITLE": title,
         "PLAYLIST_SUBTITLE": title_sub,
         "NUM_OF_SONGS": num_of_song,

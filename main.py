@@ -17,20 +17,26 @@ def main(config: DictConfig = None) -> None:
     filename = setLogFile(setting)
     f = open(filename, "w")
 
-    # get last playlist id
-    print("---------- Check Last playlist item id ... ----------")
-    last_pl_id = getLastPlaylistId(setting.playlist_origin_url)
-    f.write(f"[NOTICE] Last playlist item id is {last_pl_id} !!!\n")
-    print(f"[NOTICE] Last playlist item id is {last_pl_id} !!!")
-
     # crawling playlists and songs
     print("---------- Start playlist crawling ... ----------")
     pl_list, songs_list = [], []
 
-    for id in tqdm(range(setting.start_idx, setting.end_idx + 1)):
+    # set searching playlist idx
+    start_idx = setting.start_idx
+    if setting.end_idx:
+        end_idx = setting.end_idx
+    else:
+        # get last playlist id
+        print("---------- Check Last playlist item id ... ----------")
+        end_idx = getLastPlaylistId(setting.playlist_origin_url)
+        f.write(f"[NOTICE] Last playlist item id is {end_idx} !!!\n")
+        print(f"[NOTICE] Last playlist item id is {end_idx} !!!")
+
+    # start searching
+    for id in tqdm(range(start_idx, end_idx + 1)):
         try:
             pl_url = setting.playlist_url + str(id)
-            pl_info = getPlaylistInfo(pl_url, setting, songs_list)
+            pl_info = getPlaylistInfo(id=id, link=pl_url, setting=setting, songs_list=songs_list)
             pl_list.append(pl_info)
             f.write(f"playlist {id} is saved ...\n")
         except UnexpectedAlertPresentException:
