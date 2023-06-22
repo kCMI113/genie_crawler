@@ -31,7 +31,7 @@ def main(config: DictConfig = None) -> None:
         end_idx = getLastPlaylistId(setting.playlist_origin_url)
         f.write(f"[NOTICE] Last playlist item id is {end_idx} !!!\n")
         print(f"[NOTICE] Last playlist item id is {end_idx} !!!")
-
+    err_list = []
     # start searching
     for id in tqdm(range(start_idx, end_idx + 1)):
         try:
@@ -43,14 +43,15 @@ def main(config: DictConfig = None) -> None:
             f.write(f">>> >>> Cannot find playlist {id} !!!\n")
             print(f">>> >>> Cannot find playlist {id} !!!")
         except Exception as ex:
+            err_list.append(id)
             f.write(f">>> >>> {ex} : Error is occured at id {id} !!!\n")
             print(f">>> >>> {ex} : Error is occured at id {id} !!!")
-            exit()
 
     f.close()
 
     # save crwaling results
     saveInfoDict2Csv(pl_list=pl_list, songs_list=songs_list, setting=setting, start_idx=start_idx, end_idx=end_idx)
+    print(f'err_index:{err_list}')
 
 
 if __name__ == "__main__":
