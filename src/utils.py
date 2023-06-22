@@ -54,7 +54,10 @@ def resizeImg(path: str, size: int, max_size: int) -> str:
 
 
 def getLastPlaylistId(link: str) -> int:
-    driver = webdriver.Chrome()
+    op = webdriver.ChromeOptions()
+    op.add_argument("--headless")
+
+    driver = webdriver.Chrome(options=op)
     driver.get(url=link)
 
     items = driver.find_elements(By.CLASS_NAME, "item_cover")
