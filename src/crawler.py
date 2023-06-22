@@ -95,11 +95,15 @@ def getPlaylistInfo(link: str, is_resize: bool, img_resize: int, songs_list: lis
     songs_list += song_info
     print("--------------len of songs_list : %d --------------", len(songs_list))
 
+    song_ids = [song["SONG_ID"] for song in song_info]
+
     info = {
         "PLAYLIST_TITLE": title,
         "PLAYLIST_SUBTITLE": title_sub,
         "NUM_OF_SONGS": num_of_song,
+        "PLAYLIST_SONGS": song_ids,
         "PLAYLIST_VIEW": view,
+        "PLAYLIST_TAGS": tag_list,
         "PLAYLIST_IMG_URL": pl_img_url,
         "PLAYLIST_LIKECOUNT": like_count,
     }

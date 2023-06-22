@@ -1,36 +1,40 @@
-from tqdm import tqdm
-from selenium.common.exceptions import UnexpectedAlertPresentException
-from src.utils import setLogFile, getLastPlaylistId, saveSongs2Csv
-from src.crawler import getPlaylistInfo
+import hydra
 import pandas as pd
+from tqdm import tqdm
+from omegaconf import DictConfig
 
-if __name__ == "__main__":
-    # for DB
-    # setUp()
+from selenium.common.exceptions import UnexpectedAlertPresentException
 
-    filename = setLogFile()
+from src.utils import setLogFile, getLastPlaylistId, saveInfoDict2Csv
+from src.crawler import getPlaylistInfo
+
+
+@hydra.main(version_base="1.2", config_path="configs", config_name="config.yaml")
+def main(config: DictConfig = None) -> None:
+    setting = config
+
+    # log file setting
+    filename = setLogFile(setting)
     f = open(filename, "w")
 
-    # set driver
-    playlist_origin_url = "https://www.genie.co.kr/playlist/popular?sortOrd=RDD"
-    playlist_url = "https://www.genie.co.kr/playlist/detailView?plmSeq="
-
+    # get last playlist id
     print("---------- Check Last playlist item id ... ----------")
-    last_pl_id = getLastPlaylistId(playlist_origin_url)
+    last_pl_id = getLastPlaylistId(setting.playlist_origin_url)
     f.write(f"[NOTICE] Last playlist item id is {last_pl_id} !!!\n")
     print(f"[NOTICE] Last playlist item id is {last_pl_id} !!!")
 
+    # crawling playlists and songs
     print("---------- Start playlist crawling ... ----------")
-    is_resize = False
-    img_resize = 140
-    songs_list = []
+    is_resize = setting.is_resize
+    img_resize = setting.img_resize
 
-    # for id in tqdm(range(1, last_pl_id + 1)):
-    # for id in tqdm(range(1, 10)):
-    for id in tqdm(range(15525, 15531)):
+    pl_list, songs_list = [], []
+
+    for id in tqdm(range(setting.start_idx, setting.end_idx + 1)):
         try:
-            pl_url = playlist_url + str(id)
-            getPlaylistInfo(pl_url, is_resize, img_resize, songs_list)
+            pl_url = setting.playlist_url + str(id)
+            pl_info = getPlaylistInfo(pl_url, is_resize, img_resize, songs_list)
+            pl_list.append(pl_info)
             f.write(f"playlist {id} is saved ...\n")
         except UnexpectedAlertPresentException:
             f.write(f">>> >>> Cannot find playlist {id} !!!\n")
@@ -40,7 +44,10 @@ if __name__ == "__main__":
             print(f">>> >>> {ex} : Error is occured at id {id} !!!")
 
     f.close()
-    saveSongs2Csv(songs_list)
 
-    df = pd.read_csv("outputs/song_info.csv")
-    print(df)
+    # save crwaling results
+    saveInfoDict2Csv(pl_list, songs_list, setting)
+
+
+if __name__ == "__main__":
+    main()
