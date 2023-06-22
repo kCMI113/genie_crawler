@@ -92,7 +92,8 @@ def getPlaylistInfo(id: int, link: str, setting: DictConfig, songs_list: list[di
     info_buttons = info.find_element(By.CLASS_NAME, "info__buttons")
     sns_like = info_buttons.find_element(By.CLASS_NAME, "sns-like")
     like_radius = (sns_like.find_elements(By.TAG_NAME, "a"))[-1]
-    like_count = int(like_radius.find_element(By.ID, "emLikeCount").text)
+    like_count = like_radius.find_element(By.ID, "emLikeCount").text
+    like_count = int(re.sub("[^0-9]", "", like_count))
     print("like_count:", like_count)
 
     # info of songs in playlist
