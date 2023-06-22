@@ -1,36 +1,43 @@
-from tqdm import tqdm
-from selenium.common.exceptions import UnexpectedAlertPresentException
-from src.utils import set_logfile, get_last_playlist_id, save_songs_csv
-from src.crawler import getPlaylistInfo
+import hydra
 import pandas as pd
+from tqdm import tqdm
+from omegaconf import DictConfig
 
-if __name__ == "__main__":
-    # for DB
-    # setUp()
+from selenium.common.exceptions import UnexpectedAlertPresentException
 
-    filename = set_logfile()
+from src.utils import setLogFile, getLastPlaylistId, saveInfoDict2Csv
+from src.crawler import getPlaylistInfo
+
+
+@hydra.main(version_base="1.2", config_path="configs", config_name="config.yaml")
+def main(config: DictConfig = None) -> None:
+    setting = config
+
+    # log file setting
+    filename = setLogFile(setting)
     f = open(filename, "w")
 
-    # set driver
-    playlist_origin_url = "https://www.genie.co.kr/playlist/popular?sortOrd=RDD"
-    playlist_url = "https://www.genie.co.kr/playlist/detailView?plmSeq="
-
-    print("---------- Check Last playlist item id ... ----------")
-    last_pl_id = get_last_playlist_id(playlist_origin_url)
-    f.write(f"[NOTICE] Last playlist item id is {last_pl_id} !!!\n")
-    print(f"[NOTICE] Last playlist item id is {last_pl_id} !!!")
-
+    # crawling playlists and songs
     print("---------- Start playlist crawling ... ----------")
-    is_resize = False
-    img_resize = 140
-    songs_list = []
+    pl_list, songs_list = [], []
 
-    # for id in tqdm(range(1, last_pl_id + 1)):
-    # for id in tqdm(range(1, 10)):
-    for id in tqdm(range(15525, 15531)):
+    # set searching playlist idx
+    start_idx = setting.start_idx
+    if setting.end_idx:
+        end_idx = setting.end_idx
+    else:
+        # get last playlist id
+        print("---------- Check Last playlist item id ... ----------")
+        end_idx = getLastPlaylistId(setting.playlist_origin_url)
+        f.write(f"[NOTICE] Last playlist item id is {end_idx} !!!\n")
+        print(f"[NOTICE] Last playlist item id is {end_idx} !!!")
+
+    # start searching
+    for id in tqdm(range(start_idx, end_idx + 1)):
         try:
-            pl_url = playlist_url + str(id)
-            getPlaylistInfo(pl_url, is_resize, img_resize, songs_list)
+            pl_url = setting.playlist_url + str(id)
+            pl_info = getPlaylistInfo(id=id, link=pl_url, setting=setting, songs_list=songs_list)
+            pl_list.append(pl_info)
             f.write(f"playlist {id} is saved ...\n")
         except UnexpectedAlertPresentException:
             f.write(f">>> >>> Cannot find playlist {id} !!!\n")
@@ -38,9 +45,13 @@ if __name__ == "__main__":
         except Exception as ex:
             f.write(f">>> >>> {ex} : Error is occured at id {id} !!!\n")
             print(f">>> >>> {ex} : Error is occured at id {id} !!!")
+            exit()
 
     f.close()
-    save_songs_csv(songs_list)
 
-    df = pd.read_csv("outputs/song_info.csv")
-    print(df)
+    # save crwaling results
+    saveInfoDict2Csv(pl_list=pl_list, songs_list=songs_list, setting=setting, start_idx=start_idx, end_idx=end_idx)
+
+
+if __name__ == "__main__":
+    main()

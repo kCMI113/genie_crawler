@@ -1,10 +1,13 @@
 import re
+from omegaconf import DictConfig
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from src.utils import resize_img
+
+from src.utils import resizeImg
 
 
-def getSongInfo(song_list_wrap, img_resize: int) -> list[dict]:
+def getSongInfo(song_list_wrap, setting: DictConfig) -> list[dict]:
     list_wrap_table = song_list_wrap.find_element(By.CLASS_NAME, "list-wrap")
     table_tbody = list_wrap_table.find_element(By.TAG_NAME, "tbody")
 
@@ -15,7 +18,7 @@ def getSongInfo(song_list_wrap, img_resize: int) -> list[dict]:
         # IMG_path
         td_img = tr.find_elements(By.TAG_NAME, "td")[2]
         path_img = td_img.find_element(By.TAG_NAME, "a").find_element(By.TAG_NAME, "img").get_attribute("src")
-        path_img = resize_img(path_img[: path_img.find("/dims")], img_resize)
+        path_img = resizeImg(path_img[: path_img.find("/dims")], setting.img_resize, setting.max_resize)
         all_val.append(path_img)
 
         # [song, artist, album]
@@ -46,7 +49,7 @@ def getSongInfo(song_list_wrap, img_resize: int) -> list[dict]:
     return songs
 
 
-def getPlaylistInfo(link: str, is_resize: bool, img_resize: int, songs_list: list[dict]) -> None:
+def getPlaylistInfo(id: int, link: str, setting: DictConfig, songs_list: list[dict]) -> dict:
     driver = webdriver.Chrome()
     driver.get(url=link)
 
@@ -69,7 +72,7 @@ def getPlaylistInfo(link: str, is_resize: bool, img_resize: int, songs_list: lis
     print("num_of_song:", num_of_song)
 
     view = info_data_list[2].text  # playlist views
-    view = re.sub("[^0-9]", "", view)
+    view = int(re.sub("[^0-9]", "", view))
     print("view:", view)
 
     # playlist tags
@@ -79,7 +82,7 @@ def getPlaylistInfo(link: str, is_resize: bool, img_resize: int, songs_list: lis
 
     # playlist cover image
     pl_img_tag = driver.find_element(By.XPATH, "/html/head/meta[10]")
-    pl_img_url = resize_img(pl_img_tag.get_attribute("content"))
+    pl_img_url = resizeImg(pl_img_tag.get_attribute("content"), setting.img_resize, setting.max_resize)
     print("pl_img_url:", pl_img_url)
 
     # counts of playlist like
@@ -91,8 +94,24 @@ def getPlaylistInfo(link: str, is_resize: bool, img_resize: int, songs_list: lis
 
     # info of songs in playlist
     song_list_wrap = driver.find_element(By.CLASS_NAME, "music-list-wrap")
-    song_info = getSongInfo(song_list_wrap, img_resize)
+    song_info = getSongInfo(song_list_wrap, setting)
     songs_list += song_info
-    print("--------------len of songs_list : %d --------------", len(songs_list))
+    print(f"--------------len of songs_list : {len(songs_list)} --------------")
+
+    song_ids = [song["SONG_ID"] for song in song_info]
+
+    info = {
+        "PLAYLIST_ID": str(id),
+        "PLAYLIST_TITLE": title,
+        "PLAYLIST_SUBTITLE": title_sub,
+        "NUM_OF_SONGS": num_of_song,
+        "PLAYLIST_SONGS": song_ids,
+        "PLAYLIST_VIEW": view,
+        "PLAYLIST_TAGS": tag_list,
+        "PLAYLIST_IMG_URL": pl_img_url,
+        "PLAYLIST_LIKECOUNT": like_count,
+    }
 
     driver.close()
+
+    return info
