@@ -5,7 +5,16 @@ from selenium.webdriver.common.by import By
 from datetime import datetime
 
 
-def set_logfile() -> str:
+def createDirectory(dir: str):
+    try:
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+            print(f">>> {dir} is created !!!")
+    except OSError:
+        print(f"[ERROR] Creating {path} is failed !!!")
+
+
+def setLogFile() -> str:
     # get Timestamp
     now = datetime.now()
     now = now.strftime("%m%d_%H%M")
@@ -13,23 +22,17 @@ def set_logfile() -> str:
     # set path
     file_name = now + "_logs.txt"
     out_dir = "logs/"
-    check_dir(out_dir)
+    createDirectory(out_dir)
     file_path = os.path.join(out_dir, file_name)
 
     return file_path
 
 
-def check_dir(dir):
-    if not os.path.exists(dir):
-        os.makedirs(dir)
-        print(f"{dir} created")
-
-
-def save_songs_csv(songs_list: list[dict]) -> None:
+def saveSongs2Csv(songs_list: list[dict]) -> None:
     # set path
     file_name = "song_info.csv"
     out_dir = "outputs/"
-    check_dir(out_dir)
+    createDirectory(out_dir)
     file_path = os.path.join(out_dir, file_name)
 
     # save csv
@@ -37,11 +40,11 @@ def save_songs_csv(songs_list: list[dict]) -> None:
     songs_df.to_csv(file_path, index=False)
 
 
-def resize_img(path: str, size: int = 140) -> str:
+def resizeImg(path: str, size: int = 140) -> str:
     return path + "/dims/resize/Q_" + str(size) + "," + str(size)
 
 
-def get_last_playlist_id(link: str) -> int:
+def getLastPlaylistId(link: str) -> int:
     driver = webdriver.Chrome()
     driver.get(url=link)
 
