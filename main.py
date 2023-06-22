@@ -1,6 +1,6 @@
 from tqdm import tqdm
 from selenium.common.exceptions import UnexpectedAlertPresentException
-from src.utils import set_logfile, get_last_playlist_id, save_songs_csv
+from src.utils import setLogFile, getLastPlaylistId, saveSongs2Csv
 from src.crawler import getPlaylistInfo
 import pandas as pd
 
@@ -8,7 +8,7 @@ if __name__ == "__main__":
     # for DB
     # setUp()
 
-    filename = set_logfile()
+    filename = setLogFile()
     f = open(filename, "w")
 
     # set driver
@@ -16,7 +16,7 @@ if __name__ == "__main__":
     playlist_url = "https://www.genie.co.kr/playlist/detailView?plmSeq="
 
     print("---------- Check Last playlist item id ... ----------")
-    last_pl_id = get_last_playlist_id(playlist_origin_url)
+    last_pl_id = getLastPlaylistId(playlist_origin_url)
     f.write(f"[NOTICE] Last playlist item id is {last_pl_id} !!!\n")
     print(f"[NOTICE] Last playlist item id is {last_pl_id} !!!")
 
@@ -40,7 +40,7 @@ if __name__ == "__main__":
             print(f">>> >>> {ex} : Error is occured at id {id} !!!")
 
     f.close()
-    save_songs_csv(songs_list)
+    saveSongs2Csv(songs_list)
 
     df = pd.read_csv("outputs/song_info.csv")
     print(df)

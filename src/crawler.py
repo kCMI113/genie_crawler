@@ -1,7 +1,7 @@
 import re
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from src.utils import resize_img
+from src.utils import resizeImg
 
 
 def getSongInfo(song_list_wrap, img_resize: int) -> list[dict]:
@@ -15,7 +15,7 @@ def getSongInfo(song_list_wrap, img_resize: int) -> list[dict]:
         # IMG_path
         td_img = tr.find_elements(By.TAG_NAME, "td")[2]
         path_img = td_img.find_element(By.TAG_NAME, "a").find_element(By.TAG_NAME, "img").get_attribute("src")
-        path_img = resize_img(path_img[: path_img.find("/dims")], img_resize)
+        path_img = resizeImg(path_img[: path_img.find("/dims")], img_resize)
         all_val.append(path_img)
 
         # [song, artist, album]
@@ -79,7 +79,7 @@ def getPlaylistInfo(link: str, is_resize: bool, img_resize: int, songs_list: lis
 
     # playlist cover image
     pl_img_tag = driver.find_element(By.XPATH, "/html/head/meta[10]")
-    pl_img_url = resize_img(pl_img_tag.get_attribute("content"))
+    pl_img_url = resizeImg(pl_img_tag.get_attribute("content"))
     print("pl_img_url:", pl_img_url)
 
     # counts of playlist like
