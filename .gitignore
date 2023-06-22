@@ -1,5 +1,13 @@
+# caches
 .pytest_cache
 __pycache__
+
+# env info
 .env
+
+# logs 
 logs/
+
+# output dir and files
 outputs/
+*.csv
