@@ -11,8 +11,8 @@ pl_filename: pl_info.csv
 song_filename: song_info.csv
 
 # img resize option
-is_resize: False
 img_resize: 140
+max_resize: 600
 
 # retrival scope 
 start_idx: 15525

@@ -45,8 +45,11 @@ def saveInfoDict2Csv(pl_list: list[dict], songs_list: list[dict], setting: DictC
     songs_df.to_csv(song_path, index=False)
 
 
-def resizeImg(path: str, size: int = 140) -> str:
-    return path + "/dims/resize/Q_" + str(size) + "," + str(size)
+def resizeImg(path: str, size: int, max_size: int) -> str:
+    if size > max_size:
+        raise Exception(f"[ERROR] img_resize ({size}) must be smaller than max_size ({max_size})")
+    else:
+        return path + "/dims/resize/Q_" + str(size) + "," + str(size)
 
 
 def getLastPlaylistId(link: str) -> int:

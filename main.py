@@ -25,15 +25,12 @@ def main(config: DictConfig = None) -> None:
 
     # crawling playlists and songs
     print("---------- Start playlist crawling ... ----------")
-    is_resize = setting.is_resize
-    img_resize = setting.img_resize
-
     pl_list, songs_list = [], []
 
     for id in tqdm(range(setting.start_idx, setting.end_idx + 1)):
         try:
             pl_url = setting.playlist_url + str(id)
-            pl_info = getPlaylistInfo(pl_url, is_resize, img_resize, songs_list)
+            pl_info = getPlaylistInfo(pl_url, setting, songs_list)
             pl_list.append(pl_info)
             f.write(f"playlist {id} is saved ...\n")
         except UnexpectedAlertPresentException:
@@ -42,6 +39,7 @@ def main(config: DictConfig = None) -> None:
         except Exception as ex:
             f.write(f">>> >>> {ex} : Error is occured at id {id} !!!\n")
             print(f">>> >>> {ex} : Error is occured at id {id} !!!")
+            exit()
 
     f.close()
 
