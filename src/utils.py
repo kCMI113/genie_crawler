@@ -30,11 +30,12 @@ def setLogFile(setting: DictConfig) -> str:
     return log_path
 
 
-def saveInfoDict2Csv(pl_list: list[dict], songs_list: list[dict], setting: DictConfig) -> None:
+def saveInfoDict2Csv(pl_list: list[dict], songs_list: list[dict], setting: DictConfig, start_idx: int, end_idx: int) -> None:
     createDirectory(setting.out_dir)
+    search_range = str(start_idx) + "_" + str(end_idx) + "_"
 
-    pl_path = os.path.join(setting.out_dir, setting.pl_filename)
-    song_path = os.path.join(setting.out_dir, setting.song_filename)
+    pl_path = os.path.join(setting.out_dir, search_range + setting.pl_filename)
+    song_path = os.path.join(setting.out_dir, search_range + setting.song_filename)
 
     # save playlist csv
     pl_df = pd.DataFrame(pl_list)
