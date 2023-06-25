@@ -1,7 +1,11 @@
 import os
+import hydra
 import pandas as pd
+from omegaconf import DictConfig
 
-if __name__ == "__main__":
+
+@hydra.main(version_base="1.2", config_path="configs", config_name="config.yaml")
+def main(config: DictConfig = None) -> None:
     # Concat total file
     file_path = "./outputs/"
     files = [file for file in os.listdir(file_path) if ".csv" in file]
@@ -15,7 +19,11 @@ if __name__ == "__main__":
             songs.append(pd.read_csv(os.path.join(file_path, file)))
 
     playlists_df = pd.concat(playlists)
-    playlists_df.to_csv(os.path.join(file_path, "playlists.csv"), index=False)
+    playlists_df.to_csv(os.path.join(file_path, config.pl_concat), index=False)
 
     songs_df = pd.concat(songs)
-    songs_df.to_csv(os.path.join(file_path, "songs.csv"), index=False)
+    songs_df.to_csv(os.path.join(file_path, config.song_concat), index=False)
+
+
+if __name__ == "__main__":
+    main()
