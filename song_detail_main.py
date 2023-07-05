@@ -4,7 +4,7 @@ from tqdm import tqdm
 from omegaconf import DictConfig
 import os
 
-from src.utils import setLogFile
+from src.utils import setLogFile, saveDict2Csv
 from src.song_detail_crawler import crawlSongDetail
 
 
@@ -22,16 +22,16 @@ def main(config: DictConfig = None) -> None:
 
     # crawling playlists and songs
     print("---------- Start song detail crawling ... ----------")
-    sond_details = []
+    song_details = []
     for song_id in tqdm(song_ids):
         song_detail = crawlSongDetail(song_id, config.song_detail_url)
-        print(song_detail)
-        sond_details.append(song_detail)
+        song_details.append(song_detail)
 
     logger.close()
 
     # save crwaling results
-    # TODO
+    csv_path = os.path.join(config.out_dir, config.song_detail_filename)
+    saveDict2Csv(song_details, csv_path)
 
 
 if __name__ == "__main__":
