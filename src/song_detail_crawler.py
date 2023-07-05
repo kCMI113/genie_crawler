@@ -1,6 +1,7 @@
 from selenium import webdriver
 from src.song_detail.song_info_crawler import crawlSongInfo
 from src.song_detail.song_daliy_chart_crawler import crawlSongDailyChart
+from src.song_detail.song_lyrics_crawler import crawlSongLyrics
 
 
 def crawlSongDetail(song_id: int, song_detail_url: str) -> dict:
@@ -15,7 +16,8 @@ def crawlSongDetail(song_id: int, song_detail_url: str) -> dict:
 
     info_data = crawlSongInfo(driver)
     daily_chart = crawlSongDailyChart(driver)
+    lyrics = crawlSongLyrics(driver)
 
     driver.close()
 
-    return {"info_data": info_data, **daily_chart}
+    return {"info_data": info_data, "lyrics": lyrics, **daily_chart}
