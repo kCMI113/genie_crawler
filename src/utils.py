@@ -1,4 +1,5 @@
 import os
+import logging
 import pandas as pd
 from datetime import datetime
 from omegaconf import DictConfig
@@ -28,6 +29,11 @@ def setLogFile(setting: DictConfig) -> str:
     file_name = now + "_logs.txt"
     log_path = os.path.join(setting.log_dir, file_name)
     return log_path
+
+
+def getLogger() -> logging.Logger:
+    logger = logging.getLogger()
+    return logger
 
 
 def saveInfoDict2Csv(pl_list: list[dict], songs_list: list[dict], setting: DictConfig, start_idx: int, end_idx: int) -> None:
