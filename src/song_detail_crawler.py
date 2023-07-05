@@ -77,12 +77,3 @@ def crawlSongInfo(song_id: int, song_detail_url: str) -> dict:
     driver.close()
 
     return {"info_data": info_data}
-
-
-def crawlMultipleSongInfo(song_ids: list[int], song_detail_url: str) -> list[dict]:
-    song_infos = []
-
-    for song_id in song_ids:
-        song_infos.append(crawlSongInfo(song_id, song_detail_url))
-
-    return song_infos
