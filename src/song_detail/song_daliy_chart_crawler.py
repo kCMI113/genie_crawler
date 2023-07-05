@@ -15,7 +15,7 @@ def parsePlayCnt(play_cnt_el: WebElement) -> int:
     return int(play_cnt_el.text.replace(",", ""))
 
 
-def crawlSongDailyChart(driver: webdriver.Chrome) -> dict:
+def crawlSongDailyChart(driver: webdriver.Chrome) -> tuple[int, int]:
     song_daliy_chart_el = driver.find_element(By.CSS_SELECTOR, SONG_DAILY_CHART_SELECTOR)
 
     # listener cnt
@@ -26,4 +26,4 @@ def crawlSongDailyChart(driver: webdriver.Chrome) -> dict:
     play_cnt_el = song_daliy_chart_el.find_element(By.CSS_SELECTOR, SONG_DAILY_CHART_PLAY_CNT_SELECTOR)
     play_cnt = parsePlayCnt(play_cnt_el)
 
-    return {"listener_cnt": listener_cnt, "play_cnt": play_cnt}
+    return listener_cnt, play_cnt
