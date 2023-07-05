@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
+from src.utils import tranlateSongInfoAttrToEng
 
 SONG_INFO_DATA_SELECTOR = "ul.info-data"
 SONG_INFO_ITEM_ATTR_CLASS_NAME = "attr"
@@ -17,11 +18,11 @@ def parseSongInfoData(song_info_data_el: WebElement) -> list[dict[str, str]]:
         list[dict[str, str]]: 음악 정보 목록
     """
     song_info_item_els = song_info_data_el.find_elements(By.XPATH, "./li")
-    song_info_data = []
+    song_info_data = {}
 
     for song_info_item_el in song_info_item_els:
         attr, value = parseSongInfoItem(song_info_item_el)
-        song_info_data.append({"attr": attr, "value": value})
+        song_info_data[attr] = value
 
     return song_info_data
 
@@ -41,10 +42,13 @@ def parseSongInfoItem(song_info_item_el: WebElement) -> tuple[str, str]:
     attr_el = song_info_item_el.find_element(By.CLASS_NAME, SONG_INFO_ITEM_ATTR_CLASS_NAME)
     value_el = song_info_item_el.find_element(By.CLASS_NAME, SONG_INFO_ITEM_VALUE_CLASS_NAME)
 
-    attr_content = parseSongInfoItemAttr(attr_el)
+    attr_content_url = parseSongInfoItemAttr(attr_el)
     value_content = parseSongInfoItemValue(value_el)
 
-    return attr_content, value_content
+    # tranlate attr from url to eng
+    attr_content_eng = tranlateSongInfoAttrToEng(attr_content_url)
+
+    return attr_content_eng, value_content
 
 
 def parseSongInfoItemValue(song_info_item_value_el: WebElement) -> str:

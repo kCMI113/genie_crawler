@@ -20,4 +20,5 @@ def crawlSongDetail(song_id: int, song_detail_url: str) -> dict:
 
     driver.close()
 
-    return {"INFO_DATA": info_data, "LYRICS": lyrics, "LISTENER_CNT": listener_cnt, "PLAY_CNT": play_cnt}
+    info_data_upper_key = {key.upper(): item for key, item in info_data.items()}
+    return {**info_data_upper_key, "LYRICS": lyrics, "LISTENER_CNT": listener_cnt, "PLAY_CNT": play_cnt}
