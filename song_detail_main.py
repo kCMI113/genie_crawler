@@ -4,7 +4,7 @@ from tqdm import tqdm
 from omegaconf import DictConfig
 import os
 
-from src.utils import setLogFile, saveDict2Csv
+from src.utils import setLogFile
 from src.song_detail_crawler import crawlSongDetail
 
 
@@ -31,7 +31,9 @@ def main(config: DictConfig = None) -> None:
 
     # save crwaling results
     csv_path = os.path.join(config.out_dir, config.song_detail_filename)
-    saveDict2Csv(song_details, csv_path)
+    song_details_df = pd.DataFrame(song_details)
+    concatenated_df = song_details_df.set_index("SONG_ID").join(song_info_df.set_index("SONG_ID"), on="SONG_ID", how="left")
+    concatenated_df.to_csv(csv_path)
 
 
 if __name__ == "__main__":
