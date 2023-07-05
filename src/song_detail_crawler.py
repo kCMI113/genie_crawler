@@ -7,6 +7,10 @@ SONG_INFO_DATA_SELECTOR = "ul.info-data"
 SONG_INFO_ITEM_ATTR_CLASS_NAME = "attr"
 SONG_INFO_ITEM_VALUE_CLASS_NAME = "value"
 
+SONG_DAILY_CHART_SELECTOR = ".daily-chart div.total"
+SONG_DAILY_CHART_LISTENER_CNT_SELECTOR = "div:nth-child(1) p"
+SONG_DAILY_CHART_PLAY_CNT_SELECTOR = "div:nth-child(2) p"
+
 
 def parseSongInfoData(song_info_data_el: WebElement) -> list[dict[str, str]]:
     """음악 정보 목록을 파싱합니다.
@@ -61,7 +65,34 @@ def parseSongInfoItemAttr(song_info_item_attr_el: WebElement) -> str:
     return attr_img_el.get_attribute("src")
 
 
-def crawlSongInfo(song_id: int, song_detail_url: str) -> dict:
+def crawlSongInfo(driver: webdriver.Chrome) -> dict:
+    song_info_data_el = driver.find_element(By.CSS_SELECTOR, SONG_INFO_DATA_SELECTOR)
+    return parseSongInfoData(song_info_data_el)
+
+
+def parseListenerCnt(listener_cnt_el: WebElement) -> int:
+    return int(listener_cnt_el.text.replace(",", ""))
+
+
+def parsePlayCnt(play_cnt_el: WebElement) -> int:
+    return int(play_cnt_el.text.replace(",", ""))
+
+
+def crawlSongDailyChart(driver: webdriver.Chrome) -> dict:
+    song_daliy_chart_el = driver.find_element(By.CSS_SELECTOR, SONG_DAILY_CHART_SELECTOR)
+
+    # listener cnt
+    listener_cnt_el = song_daliy_chart_el.find_element(By.CSS_SELECTOR, SONG_DAILY_CHART_LISTENER_CNT_SELECTOR)
+    listener_cnt = parseListenerCnt(listener_cnt_el)
+
+    # play cnt
+    play_cnt_el = song_daliy_chart_el.find_element(By.CSS_SELECTOR, SONG_DAILY_CHART_PLAY_CNT_SELECTOR)
+    play_cnt = parsePlayCnt(play_cnt_el)
+
+    return {"listener_cnt": listener_cnt, "play_cnt": play_cnt}
+
+
+def crawlSongDetail(song_id: int, song_detail_url: str) -> dict:
     op = webdriver.ChromeOptions()
     op.add_argument("--headless")
     op.add_argument("--no-sandbox")
@@ -71,9 +102,9 @@ def crawlSongInfo(song_id: int, song_detail_url: str) -> dict:
     url = f"{song_detail_url}{song_id}"
     driver.get(url=url)
 
-    song_info_data_el = driver.find_element(By.CSS_SELECTOR, SONG_INFO_DATA_SELECTOR)
-    info_data = parseSongInfoData(song_info_data_el)
+    info_data = crawlSongInfo(driver)
+    daily_chart = crawlSongDailyChart(driver)
 
     driver.close()
 
-    return {"info_data": info_data}
+    return {"info_data": info_data, **daily_chart}

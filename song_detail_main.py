@@ -5,7 +5,7 @@ from omegaconf import DictConfig
 import os
 
 from src.utils import setLogFile
-from src.song_detail_crawler import crawlSongInfo
+from src.song_detail_crawler import crawlSongDetail
 
 
 @hydra.main(version_base="1.2", config_path="configs", config_name="song_detail.yaml")
@@ -24,7 +24,9 @@ def main(config: DictConfig = None) -> None:
     print("---------- Start song detail crawling ... ----------")
     sond_details = []
     for song_id in tqdm(song_ids):
-        sond_details.append(crawlSongInfo(song_id, config.song_detail_url))
+        song_detail = crawlSongDetail(song_id, config.song_detail_url)
+        print(song_detail)
+        sond_details.append(song_detail)
 
     logger.close()
 
