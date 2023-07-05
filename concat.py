@@ -7,7 +7,7 @@ from omegaconf import DictConfig
 @hydra.main(version_base="1.2", config_path="configs", config_name="config.yaml")
 def main(config: DictConfig = None) -> None:
     # Concat total file
-    file_path = "./outputs/"
+    file_path = config.out_dir
     files = [file for file in os.listdir(file_path) if ".csv" in file]
     files = sorted(files, key=lambda x: int(x[: x.find("_")]))
 
