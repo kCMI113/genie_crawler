@@ -13,7 +13,7 @@ def createDirectory(dir: str) -> None:
             os.makedirs(dir)
             print(f">>> {dir} is created !!!")
     except OSError:
-        print(f"[ERROR] Creating {path} is failed !!!")
+        print(f"[ERROR] Creating {dir} is failed !!!")
 
 
 def setLogFile(setting: DictConfig) -> str:
@@ -74,3 +74,27 @@ def getLastPlaylistId(link: str) -> int:
     driver.close()
 
     return max(ids)
+
+
+def tranlateSongInfoAttrToEng(attr: str) -> str:
+    ATTR_URL_TO_ENG = {
+        "https://image.genie.co.kr/imageg/web/detail/txt_1.png": "info_artist_type",
+        "https://image.genie.co.kr/imageg/web/detail/txt_2.png": "info_artist_active_years",
+        "https://image.genie.co.kr/imageg/web/detail/txt_3.png": "info_artist_debut",
+        "https://image.genie.co.kr/imageg/web/detail/txt_4.png": "info_artist_nationality",
+        "https://image.genie.co.kr/imageg/web/detail/txt_5.png": "info_artist_name",
+        "https://image.genie.co.kr/imageg/web/detail/txt_6.png": "info_album_title",
+        "https://image.genie.co.kr/imageg/web/detail/txt_7.png": "info_genre",
+        "https://image.genie.co.kr/imageg/web/detail/txt_8.png": "info_play_time",
+        "https://image.genie.co.kr/imageg/web/detail/txt_9.png": "info_image_video",
+        "https://image.genie.co.kr/imageg/web/detail/txt_10.png": "info_genre_style",
+        "https://image.genie.co.kr/imageg/web/detail/txt_11.png": "info_publisher",
+        "https://image.genie.co.kr/imageg/web/detail/txt_12.png": "info_publish_date",
+        "https://image.genie.co.kr/imageg/web/detail/txt_13.png": "info_agency",
+        "https://image.genie.co.kr/imageg/web/detail/txt_18.png": "info_composer",
+        "https://image.genie.co.kr/imageg/web/detail/txt_19.png": "info_composer",
+        "https://image.genie.co.kr/imageg/web/detail/txt_20.png": "info_lyricst",
+        "https://image.genie.co.kr/imageg/web/detail/txt_21.png": "info_arranger",
+    }
+
+    return ATTR_URL_TO_ENG[attr]
