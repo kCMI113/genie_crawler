@@ -60,6 +60,6 @@ def parseSongInfoItemAttr(song_info_item_attr_el: WebElement) -> str:
     return attr_img_el.get_attribute("src")
 
 
-def crawlSongInfo(driver: webdriver.Chrome) -> dict:
+def crawlSongInfo(driver: webdriver.Chrome) -> list[dict[str, str]]:
     song_info_data_el = driver.find_element(By.CSS_SELECTOR, SONG_INFO_DATA_SELECTOR)
     return parseSongInfoData(song_info_data_el)
