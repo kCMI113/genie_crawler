@@ -13,7 +13,7 @@ def createDirectory(dir: str) -> None:
             os.makedirs(dir)
             print(f">>> {dir} is created !!!")
     except OSError:
-        print(f"[ERROR] Creating {path} is failed !!!")
+        print(f"[ERROR] Creating {dir} is failed !!!")
 
 
 def setLogFile(setting: DictConfig) -> str:
