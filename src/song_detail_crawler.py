@@ -17,8 +17,7 @@ def parseSongInfoData(song_info_data_el: WebElement) -> list[dict[str, str]]:
     Returns:
         list[dict[str, str]]: 음악 정보 목록
     """
-    song_info_item_els = song_info_data_el.find_elements(By.TAG_NAME, "li")
-
+    song_info_item_els = song_info_data_el.find_elements(By.XPATH, "./li")
     song_info_data = []
 
     for song_info_item_el in song_info_item_els:
