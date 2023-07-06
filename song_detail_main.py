@@ -24,6 +24,7 @@ def main(config: DictConfig = None) -> None:
     # crawling playlists and songs
     log.info("Start song detail crawling ...")
     song_details = []
+    failed_crawling_song_ids = []
     for song_id in tqdm(song_ids, position=0, leave=True):
         with logging_redirect_tqdm():
             try:
@@ -31,6 +32,11 @@ def main(config: DictConfig = None) -> None:
                 song_details.append(song_detail)
             except Exception as e:
                 log.exception(e)
+                failed_crawling_song_ids.append(song_id)
+
+    if failed_crawling_song_ids:
+        log.warn("Failed crawling song ids : %s", str(failed_crawling_song_ids))
+
     # save crwaling results
     csv_path = os.path.join(config.out_dir, config.song_detail_filename)
     log.info("Save concatencated song_info to %s", csv_path)
