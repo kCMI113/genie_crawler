@@ -6,6 +6,7 @@ import textwrap
 from src.song_detail.song_info_crawler import crawlSongInfo
 from src.song_detail.song_daliy_chart_crawler import crawlSongDailyChart
 from src.song_detail.song_lyrics_crawler import crawlSongLyrics
+from src.song_detail.song_like_crawler import crawlSongLike
 
 
 def crawlSongDetail(song_id: int, song_detail_url: str, log: Logger) -> dict:
@@ -21,6 +22,8 @@ def crawlSongDetail(song_id: int, song_detail_url: str, log: Logger) -> dict:
     log.info("listener_cnt, play_cnt : %d, %d", listener_cnt, play_cnt)
     lyrics = crawlSongLyrics(soup)
     log.info("lyrics : %s", textwrap.shorten(lyrics, width=50, placeholder="...") if lyrics else lyrics)
+    song_like = crawlSongLike(soup)
+    log.info("Like : %d", song_like)
 
     info_data_upper_key = {key.upper(): item for key, item in info_data.items()}
-    return {**info_data_upper_key, "SONG_ID": song_id, "LYRICS": lyrics, "LISTENER_CNT": listener_cnt, "PLAY_CNT": play_cnt}
+    return {**info_data_upper_key, "SONG_ID": song_id, "LYRICS": lyrics, "LISTENER_CNT": listener_cnt, "PLAY_CNT": play_cnt, "SONG_LIKE": song_like}
