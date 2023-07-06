@@ -1,12 +1,16 @@
 # url path of genie
-song_detail_url: https://www.genie.co.kr/detail/albumInfo?axnm=
+album_detail_url: https://www.genie.co.kr/detail/albumInfo?axnm=
 
 # file path
 out_dir: outputs/
 log_dir: logs/
 
 # csv file name
-song_detail_filename: sample_song_detail_0.csv
+album_info_filename: album_info_9.csv
 
 # base song info file name
-song_info_filename: songs_v5_9.csv
+song_info_filename: songs_v5_0.csv
+
+# img resize option
+img_resize: 140
+max_resize: 600
