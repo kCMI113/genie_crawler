@@ -22,7 +22,7 @@ def crawlSongDetail(song_id: int, song_detail_url: str, log: Logger) -> dict:
     listener_cnt, play_cnt = crawlSongDailyChart(driver)
     log.info("listener_cnt, play_cnt : %d, %d", listener_cnt, play_cnt)
     lyrics = crawlSongLyrics(driver)
-    log.info("lyrics : %s", textwrap.shorten(lyrics, width=50, placeholder="..."))
+    log.info("lyrics : %s", textwrap.shorten(lyrics, width=50, placeholder="...") if lyrics else lyrics)
 
     driver.close()
 
