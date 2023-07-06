@@ -5,7 +5,7 @@ from tqdm.contrib.logging import logging_redirect_tqdm
 from omegaconf import DictConfig
 import os
 from src.utils import getLogger
-from src.album_date_crawler import crawlAlbumInfo
+from src.album_info_crawler import crawlAlbumInfo
 
 
 @hydra.main(version_base="1.2", config_path="configs", config_name="album_date.yaml")
@@ -25,10 +25,9 @@ def main(config: DictConfig = None) -> None:
     album_infos = []
     failed_crawling_album_ids = []
     for album_id in tqdm(album_ids, position=0, leave=True):
-        print(album_id)
         with logging_redirect_tqdm():
             try:
-                album_info = crawlAlbumInfo(album_id, config.album_detail_url, log, config)
+                album_info = crawlAlbumInfo(album_id, config.album_detail_url, log)
                 album_infos.append(album_info)
             except Exception as e:
                 log.exception(e)
