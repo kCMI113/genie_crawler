@@ -1,23 +1,21 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.remote.webelement import WebElement
 from src.utils import tranlateSongInfoAttrToEng
+from bs4 import BeautifulSoup, Tag, ResultSet
 
 SONG_INFO_DATA_SELECTOR = "ul.info-data"
-SONG_INFO_ITEM_ATTR_CLASS_NAME = "attr"
-SONG_INFO_ITEM_VALUE_CLASS_NAME = "value"
+SONG_INFO_ITEM_ATTR_SELECTOR = "span.attr"
+SONG_INFO_ITEM_VALUE_SELECTOR = "span.value"
 
 
-def parseSongInfoData(song_info_data_el: WebElement) -> list[dict[str, str]]:
+def parseSongInfoData(song_info_data_el: Tag) -> list[dict[str, str]]:
     """음악 정보 목록을 파싱합니다.
 
     Args:
-        song_info_data_el (WebElement): ul.info-data 태그
+        song_info_data_el (Tag): ul.info-data 태그
 
     Returns:
         list[dict[str, str]]: 음악 정보 목록
     """
-    song_info_item_els = song_info_data_el.find_elements(By.XPATH, "./li")
+    song_info_item_els: ResultSet[Tag] = song_info_data_el.findChildren("li", recursive=False)
     song_info_data = {}
 
     for song_info_item_el in song_info_item_els:
@@ -27,20 +25,20 @@ def parseSongInfoData(song_info_data_el: WebElement) -> list[dict[str, str]]:
     return song_info_data
 
 
-def parseSongInfoItem(song_info_item_el: WebElement) -> tuple[str, str]:
+def parseSongInfoItem(song_info_item_el: Tag) -> tuple[str, str]:
     """음악 정보 아이템을 파싱합니다.
     아이템은 다음과 같은 것을 의미합니다.
     `아티스트    IVE (아이브)`
     `앨범명     I've IVE`
 
     Args:
-        song_info_item_el (WebElement): ul.info-data > li
+        song_info_item_el (Tag): ul.info-data > li
 
     Returns:
         tuple[str, str]: 속성 이미지url, 속성 값
     """
-    attr_el = song_info_item_el.find_element(By.CLASS_NAME, SONG_INFO_ITEM_ATTR_CLASS_NAME)
-    value_el = song_info_item_el.find_element(By.CLASS_NAME, SONG_INFO_ITEM_VALUE_CLASS_NAME)
+    attr_el = song_info_item_el.select_one(SONG_INFO_ITEM_ATTR_SELECTOR)
+    value_el = song_info_item_el.select_one(SONG_INFO_ITEM_VALUE_SELECTOR)
 
     attr_content_url = parseSongInfoItemAttr(attr_el)
     value_content = parseSongInfoItemValue(value_el)
@@ -51,19 +49,15 @@ def parseSongInfoItem(song_info_item_el: WebElement) -> tuple[str, str]:
     return attr_content_eng, value_content
 
 
-def parseSongInfoItemValue(song_info_item_value_el: WebElement) -> str:
-    if hasattr(song_info_item_value_el, "text") and song_info_item_value_el.text:
-        return song_info_item_value_el.text
-    else:
-        value_a_el = song_info_item_value_el.find_element(By.TAG_NAME, "a")
-        return value_a_el.text
+def parseSongInfoItemValue(song_info_item_value_el: Tag) -> str:
+    return song_info_item_value_el.text
 
 
-def parseSongInfoItemAttr(song_info_item_attr_el: WebElement) -> str:
-    attr_img_el = song_info_item_attr_el.find_element(By.TAG_NAME, "img")
-    return attr_img_el.get_attribute("src")
+def parseSongInfoItemAttr(song_info_item_attr_el: Tag) -> str:
+    attr_img_el = song_info_item_attr_el.find("img")
+    return attr_img_el["src"]
 
 
-def crawlSongInfo(driver: webdriver.Chrome) -> list[dict[str, str]]:
-    song_info_data_el = driver.find_element(By.CSS_SELECTOR, SONG_INFO_DATA_SELECTOR)
+def crawlSongInfo(soup: BeautifulSoup) -> list[dict[str, str]]:
+    song_info_data_el = soup.select_one(SONG_INFO_DATA_SELECTOR)
     return parseSongInfoData(song_info_data_el)
