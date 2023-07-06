@@ -16,8 +16,8 @@ def main(config: DictConfig = None) -> None:
     log.propagate = False
 
     # load base song info
-    log.info("Load song_info files to retrieve song_id")
     song_info_path = os.path.join(config.out_dir, config.song_info_filename)
+    log.info("Load song_info files to retrieve song_id from %s", song_info_path)
     song_info_df = pd.read_csv(song_info_path, dtype={"SONG_ID": int})
     song_ids: list[int] = song_info_df["SONG_ID"].to_list()
 
@@ -30,10 +30,10 @@ def main(config: DictConfig = None) -> None:
                 song_detail = crawlSongDetail(song_id, config.song_detail_url, log)
                 song_details.append(song_detail)
             except Exception as e:
-                log.error(e)
-
+                log.exception(e)
     # save crwaling results
     csv_path = os.path.join(config.out_dir, config.song_detail_filename)
+    log.info("Save concatencated song_info to %s", csv_path)
     song_details_df = pd.DataFrame(song_details)
     concatenated_df = song_details_df.set_index("SONG_ID").join(song_info_df.set_index("SONG_ID"), on="SONG_ID", how="left")
     concatenated_df.to_csv(csv_path)
