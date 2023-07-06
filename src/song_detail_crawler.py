@@ -1,30 +1,26 @@
 from logging import Logger
-from selenium import webdriver
+from bs4 import BeautifulSoup
+import requests
+import textwrap
+
 from src.song_detail.song_info_crawler import crawlSongInfo
 from src.song_detail.song_daliy_chart_crawler import crawlSongDailyChart
 from src.song_detail.song_lyrics_crawler import crawlSongLyrics
-import textwrap
 
 
 def crawlSongDetail(song_id: int, song_detail_url: str, log: Logger) -> dict:
-    op = webdriver.ChromeOptions()
-    op.add_argument("--headless")
-    op.add_argument("--no-sandbox")
-
-    driver = webdriver.Chrome(options=op)
-
     url = f"{song_detail_url}{song_id}"
-    driver.get(url=url)
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36"}
+    r = requests.get(url, headers=headers)
+    soup = BeautifulSoup(r.text, "html.parser")
 
     log.info("- Crawling Song Detail : %d", song_id)
-    info_data = crawlSongInfo(driver)
+    info_data = crawlSongInfo(soup)
     log.info("info data : %s", str(info_data))
-    listener_cnt, play_cnt = crawlSongDailyChart(driver)
+    listener_cnt, play_cnt = crawlSongDailyChart(soup)
     log.info("listener_cnt, play_cnt : %d, %d", listener_cnt, play_cnt)
-    lyrics = crawlSongLyrics(driver)
+    lyrics = crawlSongLyrics(soup)
     log.info("lyrics : %s", textwrap.shorten(lyrics, width=50, placeholder="...") if lyrics else lyrics)
-
-    driver.close()
 
     info_data_upper_key = {key.upper(): item for key, item in info_data.items()}
     return {**info_data_upper_key, "SONG_ID": song_id, "LYRICS": lyrics, "LISTENER_CNT": listener_cnt, "PLAY_CNT": play_cnt}
