@@ -6,11 +6,10 @@ out_dir: outputs/
 log_dir: logs/
 
 # csv file name
-album_info_filename: album_info_9.csv
+album_info_filename: album_info_0.csv
 
 # base song info file name
-song_info_filename: songs_v5_0.csv
-
-# img resize option
-img_resize: 140
-max_resize: 600
+song_info_filename: songs_v4_0.csv
+# # img resize option
+# img_resize: 140
+# max_resize: 600
