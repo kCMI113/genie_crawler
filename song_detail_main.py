@@ -41,8 +41,7 @@ def main(config: DictConfig = None) -> None:
     csv_path = os.path.join(config.out_dir, config.song_detail_filename)
     log.info("Save concatencated song_info to %s", csv_path)
     song_details_df = pd.DataFrame(song_details)
-    concatenated_df = song_details_df.set_index("SONG_ID").join(song_info_df.set_index("SONG_ID"), on="SONG_ID", how="left")
-    concatenated_df.to_csv(csv_path)
+    song_details_df.to_csv(csv_path)
 
 
 if __name__ == "__main__":

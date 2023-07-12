@@ -104,3 +104,12 @@ def tranlateSongInfoAttrToEng(attr: str) -> str:
     }
 
     return ATTR_URL_TO_ENG[attr]
+
+
+def txt2int(txt: str) -> int:
+    removed_txt = txt.replace(",", "")
+
+    if not removed_txt:
+        return 0
+
+    return int(removed_txt)
