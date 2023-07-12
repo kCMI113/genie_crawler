@@ -109,7 +109,7 @@ def tranlateSongInfoAttrToEng(attr: str) -> str:
 def txt2int(txt: str) -> int:
     removed_txt = txt.replace(",", "")
 
-    if removed_txt:
+    if not removed_txt:
         return 0
 
     return int(removed_txt)
