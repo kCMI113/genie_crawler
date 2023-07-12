@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from utils import txt2int
+from src.utils import txt2int
 
 SONG_LIKE_SELECTOR = "a.like em#emLikeCount"
 
