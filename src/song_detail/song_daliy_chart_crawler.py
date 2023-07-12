@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup, Tag
+from utils import txt2int
 
 SONG_DAILY_CHART_SELECTOR = ".daily-chart div.total"
 SONG_DAILY_CHART_LISTENER_CNT_SELECTOR = "div:nth-child(1) p"
@@ -6,11 +7,11 @@ SONG_DAILY_CHART_PLAY_CNT_SELECTOR = "div:nth-child(2) p"
 
 
 def parseListenerCnt(listener_cnt_el: Tag) -> int:
-    return int(listener_cnt_el.text.replace(",", ""))
+    return txt2int(listener_cnt_el.text)
 
 
 def parsePlayCnt(play_cnt_el: Tag) -> int:
-    return int(play_cnt_el.text.replace(",", ""))
+    return txt2int(play_cnt_el.text)
 
 
 def crawlSongDailyChart(soup: BeautifulSoup) -> tuple[int, int]:
