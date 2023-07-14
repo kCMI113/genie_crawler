@@ -15,7 +15,7 @@ def parseSongInfoData(song_info_data_el: Tag) -> list[dict[str, str]]:
     Returns:
         list[dict[str, str]]: 음악 정보 목록
     """
-    song_info_item_els: ResultSet[Tag] = song_info_data_el.findChildren("li", recursive=False)
+    song_info_item_els: ResultSet[Tag] = song_info_data_el.findChildren("li")
     song_info_data = {}
 
     for song_info_item_el in song_info_item_els:
