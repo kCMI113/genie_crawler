@@ -19,6 +19,9 @@ def parseSongInfoData(song_info_data_el: Tag) -> list[dict[str, str]]:
     song_info_data = {}
 
     for song_info_item_el in song_info_item_els:
+        if song_info_item_el.parent is not song_info_data_el:
+            continue
+
         attr, value = parseSongInfoItem(song_info_item_el)
         song_info_data[attr] = value
 
