@@ -51,7 +51,7 @@ def main(config: DictConfig = None) -> None:
 
     # save crwaling results
     saveInfoDict2Csv(pl_list=pl_list, songs_list=songs_list, setting=setting, start_idx=start_idx, end_idx=end_idx)
-    print(f'err_index:{err_list}')
+    print(f"err_index:{err_list}")
 
 
 if __name__ == "__main__":
