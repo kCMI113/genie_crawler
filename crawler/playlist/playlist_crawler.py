@@ -1,13 +1,14 @@
 import re
 from omegaconf import DictConfig
+from logging import Logger
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-from src.utils import resizeImg
+from ..utils import resizeImg
 
 
-def getSongInfo(song_list_wrap, setting: DictConfig) -> list[dict]:
+def getSongInfo(song_list_wrap, config: DictConfig, log: Logger) -> list[dict]:
     list_wrap_table = song_list_wrap.find_element(By.CLASS_NAME, "list-wrap")
     table_tbody = list_wrap_table.find_element(By.TAG_NAME, "tbody")
 
@@ -18,7 +19,7 @@ def getSongInfo(song_list_wrap, setting: DictConfig) -> list[dict]:
         # IMG_path
         td_img = tr.find_elements(By.TAG_NAME, "td")[2]
         path_img = td_img.find_element(By.TAG_NAME, "a").find_element(By.TAG_NAME, "img").get_attribute("src")
-        path_img = resizeImg(path_img[: path_img.find("/dims")], setting.img_resize, setting.max_resize)
+        path_img = resizeImg(path_img[: path_img.find("/dims")], config.img_resize, config.max_resize)
         all_val.append(path_img)
 
         # [song, artist, album]
@@ -45,11 +46,11 @@ def getSongInfo(song_list_wrap, setting: DictConfig) -> list[dict]:
             "ALBUM_ID": all_val[6],
         }
         songs.append(info)
-
+    log.info("-- %d songs are added", len(songs))
     return songs
 
 
-def getPlaylistInfo(id: int, link: str, setting: DictConfig, songs_list: list[dict]) -> dict:
+def getPlaylistInfo(id: int, link: str, config: DictConfig, songs_list: list[dict], log: Logger) -> dict:
     op = webdriver.ChromeOptions()
     op.add_argument("--headless")
 
@@ -57,36 +58,35 @@ def getPlaylistInfo(id: int, link: str, setting: DictConfig, songs_list: list[di
     driver.get(url=link)
 
     playlist_info = driver.find_element(By.CLASS_NAME, "playlist-info")
-    covers = playlist_info.find_element(By.CLASS_NAME, "covers")
     info = playlist_info.find_element(By.CLASS_NAME, "info")
 
     # playlist title
     title = info.find_element(By.CLASS_NAME, "info__title").text
-    print("title:", title)
+    log.info("title: %s", title)
 
     # playlist description
     title_sub = info.find_element(By.CLASS_NAME, "info__title--sub").text
-    print("title_sub:", title_sub)
+    log.info("title_sub: %s", title_sub)
 
     info_data = info.find_element(By.CLASS_NAME, "info__data")
     info_data_list = info_data.find_elements(By.TAG_NAME, "dd")
 
     num_of_song = int((info_data_list[1].text.rstrip())[:-1])  # nums of playlist songs
-    print("num_of_song:", num_of_song)
+    log.info("num_of_song: %d", num_of_song)
 
     view = info_data_list[2].text  # playlist views
     view = int(re.sub("[^0-9]", "", view))
-    print("view:", view)
+    log.info("view: %d", view)
 
     # playlist tags
     tags = info_data.find_element(By.CLASS_NAME, "tags").find_elements(By.TAG_NAME, "a")
     tag_list = [tag.text[1:] for tag in tags]
-    print("tag_list:", tag_list)
+    log.info("tag_list: %s", tag_list)
 
     # playlist cover image
     pl_img_tag = driver.find_element(By.XPATH, "/html/head/meta[10]")
-    pl_img_url = resizeImg(pl_img_tag.get_attribute("content"), setting.img_resize, setting.max_resize)
-    print("pl_img_url:", pl_img_url)
+    pl_img_url = resizeImg(pl_img_tag.get_attribute("content"), config.img_resize, config.max_resize)
+    log.info("pl_img_url: %s", pl_img_url)
 
     # counts of playlist like
     info_buttons = info.find_element(By.CLASS_NAME, "info__buttons")
@@ -94,14 +94,12 @@ def getPlaylistInfo(id: int, link: str, setting: DictConfig, songs_list: list[di
     like_radius = (sns_like.find_elements(By.TAG_NAME, "a"))[-1]
     like_count = like_radius.find_element(By.ID, "emLikeCount").text
     like_count = int(re.sub("[^0-9]", "", like_count))
-    print("like_count:", like_count)
+    log.info("like_count: %d", like_count)
 
     # info of songs in playlist
     song_list_wrap = driver.find_element(By.CLASS_NAME, "music-list-wrap")
-    song_info = getSongInfo(song_list_wrap, setting)
+    song_info = getSongInfo(song_list_wrap, config)
     songs_list += song_info
-    print(f"--------------len of songs_list : {len(songs_list)} --------------")
-
     song_ids = [song["SONG_ID"] for song in song_info]
 
     info = {
@@ -117,5 +115,6 @@ def getPlaylistInfo(id: int, link: str, setting: DictConfig, songs_list: list[di
     }
 
     driver.close()
+    log.info("-- now nums of songs : %d", len(songs_list))
 
     return info
