@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup, Tag
-from src.utils import txt2int
+from ...utils import txt2int
 
 SONG_DAILY_CHART_SELECTOR = ".daily-chart div.total"
 SONG_DAILY_CHART_LISTENER_CNT_SELECTOR = "div:nth-child(1) p"
