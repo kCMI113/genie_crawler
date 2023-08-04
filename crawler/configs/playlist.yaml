@@ -4,7 +4,6 @@ playlist_url: https://www.genie.co.kr/playlist/detailView?plmSeq=
 
 # file path
 out_dir: outputs/
-log_dir: outputs/logs/
 
 # csv file name
 pl_filename: pl_info.csv

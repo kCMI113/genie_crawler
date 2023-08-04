@@ -3,7 +3,6 @@ album_detail_url: https://www.genie.co.kr/detail/albumInfo?axnm=
 
 # file path
 out_dir: outputs/
-log_dir: outputs/logs/
 
 # csv file name
 album_info_filename: album_info_0717.csv
