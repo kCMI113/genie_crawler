@@ -5,11 +5,11 @@ from omegaconf import DictConfig
 
 from selenium.common.exceptions import UnexpectedAlertPresentException
 
-from src.utils import setLogFile, getLastPlaylistId, saveInfoDict2Csv
-from src.crawler import getPlaylistInfo
+from ..utils import setLogFile, getLastPlaylistId, saveInfoDict2Csv
+from .playlist_crawler import getPlaylistInfo
 
 
-@hydra.main(version_base="1.2", config_path="configs", config_name="config.yaml")
+@hydra.main(version_base="1.2", config_path="configs", config_name="playlist.yaml")
 def main(config: DictConfig = None) -> None:
     setting = config
 
