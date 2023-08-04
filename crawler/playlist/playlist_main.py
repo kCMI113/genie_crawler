@@ -5,7 +5,7 @@ from omegaconf import DictConfig
 
 from selenium.common.exceptions import UnexpectedAlertPresentException
 
-from ..utils import setLogFile, getLastPlaylistId, saveInfoDict2Csv
+from ..utils import getLogger, getLastPlaylistId, saveInfoDict2Csv
 from .playlist_crawler import getPlaylistInfo
 
 
@@ -13,12 +13,12 @@ from .playlist_crawler import getPlaylistInfo
 def main(config: DictConfig = None) -> None:
     setting = config
 
-    # log file setting
-    filename = setLogFile(setting)
-    f = open(filename, "w")
+    # logger setting
+    log = getLogger()
+    log.propagate = False
 
     # crawling playlists and songs
-    print("---------- Start playlist crawling ... ----------")
+    log.info("Start playlist crawling ...")
     pl_list, songs_list = [], []
 
     # set searching playlist idx
@@ -27,31 +27,27 @@ def main(config: DictConfig = None) -> None:
         end_idx = setting.end_idx
     else:
         # get last playlist id
-        print("---------- Check Last playlist item id ... ----------")
+        log.info("Check Last playlist item id ...")
         end_idx = getLastPlaylistId(setting.playlist_origin_url)
-        f.write(f"[NOTICE] Last playlist item id is {end_idx} !!!\n")
-        print(f"[NOTICE] Last playlist item id is {end_idx} !!!")
+        log.info("-- Last playlist item id is %d !!!", end_idx)
     err_list = []
+
     # start searching
     for id in tqdm(range(start_idx, end_idx + 1)):
         try:
             pl_url = setting.playlist_url + str(id)
-            pl_info = getPlaylistInfo(id=id, link=pl_url, setting=setting, songs_list=songs_list)
+            pl_info = getPlaylistInfo(id=id, link=pl_url, setting=setting, songs_list=songs_list, logger=log)
             pl_list.append(pl_info)
-            f.write(f"playlist {id} is saved ...\n")
+            log.info("playlist Id: %d", id)
         except UnexpectedAlertPresentException:
-            f.write(f">>> >>> Cannot find playlist {id} !!!\n")
-            print(f">>> >>> Cannot find playlist {id} !!!")
+            log.warning("Cannot find playlist %d", id)
         except Exception as ex:
             err_list.append(id)
-            f.write(f">>> >>> {ex} : Error is occured at id {id} !!!\n")
-            print(f">>> >>> {ex} : Error is occured at id {id} !!!")
-
-    f.close()
+            log.warning("%s : Error is occured at id %d", ex, id)
 
     # save crwaling results
     saveInfoDict2Csv(pl_list=pl_list, songs_list=songs_list, setting=setting, start_idx=start_idx, end_idx=end_idx)
-    print(f"err_index:{err_list}")
+    log.info("err_index: %s", err_list)
 
 
 if __name__ == "__main__":
