@@ -5,8 +5,8 @@ from omegaconf import DictConfig
 
 from selenium.common.exceptions import UnexpectedAlertPresentException
 
-from ..utils import getLogger, getLastPlaylistId, saveInfoDict2Csv
-from .playlist_crawler import getPlaylistInfo
+from src.utils import getLogger, getLastPlaylistId, saveInfoDict2Csv
+from playlist.playlist_crawler import getPlaylistInfo
 
 
 @hydra.main(version_base="1.2", config_path="configs", config_name="playlist.yaml")
@@ -43,9 +43,11 @@ def main(config: DictConfig = None) -> None:
             err_list.append(id)
             log.warning("%s : Error is occured at id %d", ex, id)
 
+    if err_list:
+        log.warn("Failed crawling song ids : %s", err_list)
+
     # save crwaling results
     saveInfoDict2Csv(pl_list, songs_list, config, start_idx, end_idx)
-    log.info("err_index: %s", err_list)
 
 
 if __name__ == "__main__":

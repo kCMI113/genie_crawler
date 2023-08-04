@@ -6,10 +6,10 @@ from omegaconf import DictConfig
 import os
 
 from ..utils import getLogger
-from .song_detail_crawler import crawlSongDetail
+from .song.song_detail_crawler import crawlSongDetail
 
 
-@hydra.main(version_base="1.2", config_path="configs", config_name="song_detail.yaml")
+@hydra.main(version_base="1.2", config_path="configs", config_name="song.yaml")
 def main(config: DictConfig = None) -> None:
     # log file setting
     log = getLogger()

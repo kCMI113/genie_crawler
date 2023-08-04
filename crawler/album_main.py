@@ -1,14 +1,14 @@
+import os
 import hydra
 import pandas as pd
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 from omegaconf import DictConfig
-import os
 from src.utils import getLogger
-from src.album_info_crawler import crawlAlbumInfo
+from .album.album_info_crawler import crawlAlbumInfo
 
 
-@hydra.main(version_base="1.2", config_path="configs", config_name="album_date.yaml")
+@hydra.main(version_base="1.2", config_path="configs", config_name="album.yaml")
 def main(config: DictConfig = None) -> None:
     # log file setting
     log = getLogger()
