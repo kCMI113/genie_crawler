@@ -11,8 +11,6 @@ from .playlist_crawler import getPlaylistInfo
 
 @hydra.main(version_base="1.2", config_path="configs", config_name="playlist.yaml")
 def main(config: DictConfig = None) -> None:
-    setting = config
-
     # logger setting
     log = getLogger()
     log.propagate = False
@@ -22,21 +20,21 @@ def main(config: DictConfig = None) -> None:
     pl_list, songs_list = [], []
 
     # set searching playlist idx
-    start_idx = setting.start_idx
-    if setting.end_idx:
-        end_idx = setting.end_idx
+    start_idx = config.start_idx
+    if config.end_idx:
+        end_idx = config.end_idx
     else:
         # get last playlist id
         log.info("Check Last playlist item id ...")
-        end_idx = getLastPlaylistId(setting.playlist_origin_url)
+        end_idx = getLastPlaylistId(config.playlist_origin_url)
         log.info("-- Last playlist item id is %d !!!", end_idx)
     err_list = []
 
     # start searching
     for id in tqdm(range(start_idx, end_idx + 1)):
         try:
-            pl_url = setting.playlist_url + str(id)
-            pl_info = getPlaylistInfo(id=id, link=pl_url, setting=setting, songs_list=songs_list, logger=log)
+            pl_url = config.playlist_url + str(id)
+            pl_info = getPlaylistInfo(id, pl_url, config, songs_list, log)
             pl_list.append(pl_info)
             log.info("playlist Id: %d", id)
         except UnexpectedAlertPresentException:
@@ -46,7 +44,7 @@ def main(config: DictConfig = None) -> None:
             log.warning("%s : Error is occured at id %d", ex, id)
 
     # save crwaling results
-    saveInfoDict2Csv(pl_list=pl_list, songs_list=songs_list, setting=setting, start_idx=start_idx, end_idx=end_idx)
+    saveInfoDict2Csv(pl_list, songs_list, config, start_idx, end_idx)
     log.info("err_index: %s", err_list)
 
 
