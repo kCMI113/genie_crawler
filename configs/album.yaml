@@ -3,13 +3,10 @@ album_detail_url: https://www.genie.co.kr/detail/albumInfo?axnm=
 
 # file path
 out_dir: outputs/
-log_dir: logs/
+log_dir: outputs/logs/
 
 # csv file name
-album_info_filename: album_info_0.csv
+album_info_filename: album_info_0717.csv
 
 # base song info file name
-song_info_filename: songs_v4_0.csv
-# # img resize option
-# img_resize: 140
-# max_resize: 600
+song_info_filename: 15625_15632_song_info.csv

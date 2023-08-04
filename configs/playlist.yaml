@@ -5,7 +5,7 @@ album_url: https://www.genie.co.kr/detail/albumInfo?axnm=
 
 # file path
 out_dir: outputs/
-log_dir: logs/
+log_dir: outputs/logs/
 
 # csv file name
 pl_filename: pl_info.csv
@@ -20,6 +20,6 @@ song_concat: songs.csv
 img_resize: 140
 max_resize: 600
 
-# retrival scope 
-start_idx: 9001
-end_idx: 10000
+# retrival scope
+start_idx: 15625
+end_idx:

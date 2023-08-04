@@ -3,10 +3,10 @@ song_detail_url: https://www.genie.co.kr/detail/songInfo?xgnm=
 
 # file path
 out_dir: outputs/
-log_dir: logs/
+log_dir: outputs/logs/
 
 # csv file name
-song_detail_filename: sample_song_detail_0.csv
+song_detail_filename: song_detail_0717.csv
 
 # base song info file name
-song_info_filename: songs_v4_0.csv
+song_info_filename: 15624_15632_song_info.csv
