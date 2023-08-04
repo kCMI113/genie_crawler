@@ -17,20 +17,6 @@ def createDirectory(dir: str) -> None:
         print(f"[ERROR] Creating {dir} is failed !!!")
 
 
-def setLogFile(setting: DictConfig) -> str:
-    # get Timestamp
-    now = datetime.now()
-    now = now.strftime("%m%d_%H%M")
-
-    # create log dir
-    createDirectory(setting.log_dir)
-
-    # set path
-    file_name = now + "_logs.txt"
-    log_path = os.path.join(setting.log_dir, file_name)
-    return log_path
-
-
 def getLogger() -> logging.Logger:
     return logging.getLogger()
 
