@@ -1,9 +1,6 @@
 import hydra
-import pandas as pd
 from tqdm import tqdm
 from omegaconf import DictConfig
-
-from selenium.common.exceptions import UnexpectedAlertPresentException
 
 from src.utils import getLogger, getLastPlaylistId, saveInfoDict2Csv
 from playlist.playlist_crawler import getPlaylistInfo
@@ -37,14 +34,15 @@ def main(config: DictConfig = None) -> None:
             pl_info = getPlaylistInfo(id, pl_url, config, songs_list, log)
             pl_list.append(pl_info)
             log.info("playlist Id: %d", id)
-        except UnexpectedAlertPresentException:
+        except AttributeError:
+            err_list.append(id)
             log.warning("Cannot find playlist %d", id)
         except Exception as ex:
             err_list.append(id)
             log.warning("%s : Error is occured at id %d", ex, id)
 
     if err_list:
-        log.warn("Failed crawling song ids : %s", err_list)
+        log.warning("Failed crawling playlist ids : %s", err_list)
 
     # save crwaling results
     saveInfoDict2Csv(pl_list, songs_list, config, start_idx, end_idx)

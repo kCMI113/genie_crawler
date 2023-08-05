@@ -2,8 +2,8 @@ from datetime import date
 from logging import Logger
 from omegaconf import dictconfig
 from bs4 import BeautifulSoup
-from selenium.webdriver.common.by import By
 import requests
+
 from src.utils import resizeImg
 
 

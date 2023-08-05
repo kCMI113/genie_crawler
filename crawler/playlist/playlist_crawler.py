@@ -1,35 +1,34 @@
 import re
-from omegaconf import DictConfig
+import requests
 from logging import Logger
-
-from selenium import webdriver
-from selenium.webdriver.common.by import By
+from bs4 import BeautifulSoup
+from omegaconf import DictConfig
 
 from src.utils import resizeImg
 
 
 def getSongInfo(song_list_wrap, config: DictConfig, log: Logger) -> list[dict]:
-    list_wrap_table = song_list_wrap.find_element(By.CLASS_NAME, "list-wrap")
-    table_tbody = list_wrap_table.find_element(By.TAG_NAME, "tbody")
+    list_wrap_table = song_list_wrap.select_one(".list-wrap")
+    table_tbody = list_wrap_table.find("tbody")
 
     songs = []
-    for tr in table_tbody.find_elements(By.TAG_NAME, "tr"):
+    for tr in table_tbody.find_all("tr"):
         all_val = []
 
         # IMG_path
-        td_img = tr.find_elements(By.TAG_NAME, "td")[2]
-        path_img = td_img.find_element(By.TAG_NAME, "a").find_element(By.TAG_NAME, "img").get_attribute("src")
-        path_img = resizeImg(path_img[: path_img.find("/dims")], config.img_resize, config.max_resize)
+        td_img = tr.find_all("td")[2]
+        path_img = td_img.find("a").find("img")["src"]
+        path_img = "https:" + resizeImg(path_img[: path_img.find("/dims")], config.img_resize, config.max_resize)
         all_val.append(path_img)
 
         # [song, artist, album]
-        td_info = tr.find_elements(By.TAG_NAME, "td")[4]
-        for idx, td_a in enumerate(td_info.find_elements(By.TAG_NAME, "a")):
-            onclick = td_a.get_attribute("onclick")
+        td_info = tr.find_all("td")[4]
+        for idx, td_a in enumerate(td_info.find_all("a")):
+            onclick = td_a["onclick"]
             start_idx = onclick.find("('")
 
             if idx == 0:
-                val = td_a.get_attribute("title")
+                val = td_a["title"]
                 end_idx = onclick.find("',")
             else:
                 val = td_a.text
@@ -50,26 +49,24 @@ def getSongInfo(song_list_wrap, config: DictConfig, log: Logger) -> list[dict]:
     return songs
 
 
-def getPlaylistInfo(id: int, link: str, config: DictConfig, songs_list: list[dict], log: Logger) -> dict:
-    op = webdriver.ChromeOptions()
-    op.add_argument("--headless")
+def getPlaylistInfo(id: int, url: str, config: DictConfig, songs_list: list[dict], log: Logger) -> dict:
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36"}
+    r = requests.get(url, headers=headers)
+    soup = BeautifulSoup(r.text, "html.parser")
 
-    driver = webdriver.Chrome(options=op)
-    driver.get(url=link)
-
-    playlist_info = driver.find_element(By.CLASS_NAME, "playlist-info")
-    info = playlist_info.find_element(By.CLASS_NAME, "info")
+    playlist_info = soup.select_one(".playlist-info")
+    info = playlist_info.select_one(".info")
 
     # playlist title
-    title = info.find_element(By.CLASS_NAME, "info__title").text
+    title = info.select_one(".info__title").text
     log.info("title: %s", title)
 
     # playlist description
-    title_sub = info.find_element(By.CLASS_NAME, "info__title--sub").text
+    title_sub = info.select_one(".info__title--sub").text
     log.info("title_sub: %s", title_sub)
 
-    info_data = info.find_element(By.CLASS_NAME, "info__data")
-    info_data_list = info_data.find_elements(By.TAG_NAME, "dd")
+    info_data = info.select_one(".info__data")
+    info_data_list = info_data.find_all("dd")
 
     num_of_song = int((info_data_list[1].text.rstrip())[:-1])  # nums of playlist songs
     log.info("num_of_song: %d", num_of_song)
@@ -79,25 +76,25 @@ def getPlaylistInfo(id: int, link: str, config: DictConfig, songs_list: list[dic
     log.info("view: %d", view)
 
     # playlist tags
-    tags = info_data.find_element(By.CLASS_NAME, "tags").find_elements(By.TAG_NAME, "a")
+    tags = info_data.select_one(".tags").find_all("a")
     tag_list = [tag.text[1:] for tag in tags]
     log.info("tag_list: %s", tag_list)
 
     # playlist cover image
-    pl_img_tag = driver.find_element(By.XPATH, "/html/head/meta[10]")
-    pl_img_url = resizeImg(pl_img_tag.get_attribute("content"), config.img_resize, config.max_resize)
+    pl_img_url = soup.find("meta", {"property": "og:image:secure_url"})["content"]
+    pl_img_url = resizeImg(pl_img_url, config.img_resize, config.max_resize)
     log.info("pl_img_url: %s", pl_img_url)
 
     # counts of playlist like
-    info_buttons = info.find_element(By.CLASS_NAME, "info__buttons")
-    sns_like = info_buttons.find_element(By.CLASS_NAME, "sns-like")
-    like_radius = (sns_like.find_elements(By.TAG_NAME, "a"))[-1]
-    like_count = like_radius.find_element(By.ID, "emLikeCount").text
+    info_buttons = info.select_one(".info__buttons")
+    sns_like = info_buttons.select_one(".sns-like")
+    like_radius = (sns_like.find_all("a"))[-1]
+    like_count = like_radius.find("em").text
     like_count = int(re.sub("[^0-9]", "", like_count))
     log.info("like_count: %d", like_count)
 
     # info of songs in playlist
-    song_list_wrap = driver.find_element(By.CLASS_NAME, "music-list-wrap")
+    song_list_wrap = soup.select_one(".music-list-wrap")
     song_info = getSongInfo(song_list_wrap, config, log)
     songs_list += song_info
     song_ids = [song["SONG_ID"] for song in song_info]
@@ -114,7 +111,6 @@ def getPlaylistInfo(id: int, link: str, config: DictConfig, songs_list: list[dic
         "PLAYLIST_LIKECOUNT": like_count,
     }
 
-    driver.close()
     log.info("-- now nums of songs : %d", len(songs_list))
 
     return info
