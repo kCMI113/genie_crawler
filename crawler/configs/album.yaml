@@ -8,4 +8,8 @@ out_dir: outputs/
 album_info_filename: album_info_0717.csv
 
 # base song info file name
-song_info_filename: 15625_15632_song_info.csv
+song_info_filename: 1_5_song_info.csv
+
+# img resize option
+img_resize: 244
+max_resize: 600
