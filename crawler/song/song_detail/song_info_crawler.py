@@ -1,4 +1,4 @@
-from ...utils import tranlateSongInfoAttrToEng
+from src.utils import tranlateSongInfoAttrToEng
 from bs4 import BeautifulSoup, Tag, ResultSet
 
 SONG_INFO_DATA_SELECTOR = "ul.info-data"

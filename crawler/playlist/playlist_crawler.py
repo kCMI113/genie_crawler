@@ -5,7 +5,7 @@ from logging import Logger
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-from ..utils import resizeImg
+from src.utils import resizeImg
 
 
 def getSongInfo(song_list_wrap, config: DictConfig, log: Logger) -> list[dict]:
@@ -98,7 +98,7 @@ def getPlaylistInfo(id: int, link: str, config: DictConfig, songs_list: list[dic
 
     # info of songs in playlist
     song_list_wrap = driver.find_element(By.CLASS_NAME, "music-list-wrap")
-    song_info = getSongInfo(song_list_wrap, config)
+    song_info = getSongInfo(song_list_wrap, config, log)
     songs_list += song_info
     song_ids = [song["SONG_ID"] for song in song_info]
 

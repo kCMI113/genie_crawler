@@ -5,8 +5,8 @@ from tqdm.contrib.logging import logging_redirect_tqdm
 from omegaconf import DictConfig
 import os
 
-from ..utils import getLogger
-from .song.song_detail_crawler import crawlSongDetail
+from src.utils import getLogger
+from song.song_detail_crawler import crawlSongDetail
 
 
 @hydra.main(version_base="1.2", config_path="configs", config_name="song.yaml")
