@@ -1,6 +1,6 @@
 from ..document import PlaylistDocument
 from ..exception import NotFoundPlaylistException
-from ...dto.model import Playlist, Song
+from dto.model import Playlist, Song
 from .common import find_song_docs_by_dto
 from datetime import datetime
 from mongoengine import QuerySet

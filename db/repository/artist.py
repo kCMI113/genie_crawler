@@ -1,6 +1,6 @@
 from ..document import ArtistDocument
 from ..exception import NotFoundArtistException
-from ...dto.model import Artist
+from dto.model import Artist
 from datetime import datetime
 from mongoengine import QuerySet
 

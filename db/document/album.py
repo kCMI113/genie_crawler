@@ -1,6 +1,6 @@
 from mongoengine import Document, StringField, DateTimeField, URLField
 
-from ...dto.model import Album
+from dto.model import Album
 from datetime import datetime
 
 

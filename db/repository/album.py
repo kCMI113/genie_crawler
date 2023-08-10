@@ -1,6 +1,6 @@
 from ..document import AlbumDocument
 from ..exception import NotFoundAlbumException
-from ...dto.model import Album
+from dto.model import Album
 from datetime import datetime, date
 from mongoengine import QuerySet
 

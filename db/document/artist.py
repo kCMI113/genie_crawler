@@ -1,6 +1,6 @@
 from mongoengine import Document, StringField, DateTimeField
 
-from ...dto.model import Artist
+from dto.model import Artist
 from datetime import datetime
 
 

@@ -1,5 +1,5 @@
 from mongoengine import Document, StringField, ReferenceField, ListField, IntField, URLField, DateTimeField
-from ...dto.model import Song
+from dto.model import Song
 from .artist import ArtistDocument
 from .album import AlbumDocument
 from datetime import datetime
