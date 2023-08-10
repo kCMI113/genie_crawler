@@ -9,8 +9,10 @@ emoji==2.5.1
 exceptiongroup==1.1.1
 h11==0.14.0
 idna==3.4
+mongoengine==0.27.0
 outcome==1.2.0
 pycparser==2.21
+pydantic==2.1.1
 pandas==2.0.2
 PySocks==1.7.1
 requests==2.31.0
