@@ -18,7 +18,6 @@ class PlaylistRepository:
         tags: list[str],
         songs: list[Song],
         img_url: str,
-        created_at: datetime,
     ) -> Playlist:
         song_docs = find_song_docs_by_dto(songs)
         playlist = PlaylistDocument(
@@ -31,8 +30,6 @@ class PlaylistRepository:
             tags=tags,
             songs=song_docs,
             img_url=img_url,
-            created_at=created_at,
-            updated_at=created_at,
         )
         saved: PlaylistDocument = playlist.save()
         return saved.to_dto()

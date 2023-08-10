@@ -1,6 +1,7 @@
 from mongoengine import Document, StringField, DateTimeField, URLField
 
 from ...dto.model import Album
+from datetime import datetime
 
 
 class AlbumDocument(Document):
@@ -8,8 +9,8 @@ class AlbumDocument(Document):
     name = StringField(required=True)
     img_url = URLField()
     released_date = DateTimeField(required=True)
-    created_at = DateTimeField(required=True)
-    updated_at = DateTimeField(required=True)
+    created_at = DateTimeField(required=True, default=datetime.utcnow)
+    updated_at = DateTimeField(required=True, default=datetime.utcnow)
 
     def to_dto(self) -> Album:
         return Album(

@@ -20,7 +20,6 @@ class SongRepository:
         genres: list[str],
         spotify_url: str,
         released_date: datetime,
-        created_at: datetime,
     ) -> Song:
         song = SongDocument(
             genie_id=genie_id,
@@ -34,8 +33,6 @@ class SongRepository:
             genres=genres,
             spotify_url=spotify_url,
             released_date=released_date,
-            created_at=created_at,
-            updated_at=created_at,
         )
         saved: SongDocument = song.save()
         return saved.to_dto()

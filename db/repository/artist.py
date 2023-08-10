@@ -6,8 +6,8 @@ from mongoengine import QuerySet
 
 
 class ArtistRepository:
-    def create_artist(self, genie_id: str, name: str, created_at: datetime) -> Artist:
-        artist = ArtistDocument(genie_id=genie_id, name=name, created_at=created_at, updated_at=created_at)
+    def create_artist(self, genie_id: str, name: str) -> Artist:
+        artist = ArtistDocument(genie_id=genie_id, name=name)
         saved: ArtistDocument = artist.save()
         return saved.to_dto()
 

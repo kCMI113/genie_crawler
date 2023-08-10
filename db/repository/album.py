@@ -6,10 +6,9 @@ from mongoengine import QuerySet
 
 
 class AlbumRepository:
-    def create_Album(self, genie_id: str, name: str, img_url: str, released_date: date, created_at: datetime) -> Album:
-        album = AlbumDocument(
-            genie_id=genie_id, name=name, img_url=img_url, released_date=released_date, created_at=created_at, updated_at=created_at
-        )
+    def create_Album(self, genie_id: str, name: str, img_url: str, released_date: date) -> Album:
+        album = AlbumDocument(genie_id=genie_id, name=name, img_url=img_url, released_date=released_date)
+
         saved: AlbumDocument = album.save()
         return saved.to_dto()
 
