@@ -1,5 +1,5 @@
 from ..document import SongDocument
-from ...dto.model import Album, Artist, Song
+from dto.model import Album, Artist, Song
 from ..exception import NotFoundSongException
 from .common import find_album_doc_by_dto, find_artist_doc_by_dto
 from datetime import datetime
