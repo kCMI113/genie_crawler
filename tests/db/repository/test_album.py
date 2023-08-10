@@ -22,7 +22,7 @@ class Testalbum(unittest.TestCase):
         self.__album(
             "H1",
             "주혜인",
-            "https://image.genie.co.kr/Y/IMAGE/IMG_ALBUM/084/019/740/84019740_1688692234715_1_600x600.JPG/dims/resize/Q_80,0",
+            "http://album.png",
             date(2001, 3, 13),
         )
 
@@ -30,7 +30,7 @@ class Testalbum(unittest.TestCase):
         album = self.__album(
             "H1",
             "주혜인",
-            "https://image.genie.co.kr/Y/IMAGE/IMG_ALBUM/084/019/740/84019740_1688692234715_1_600x600.JPG/dims/resize/Q_80,0",
+            "http://album.png",
             date(2001, 3, 13),
         )
 
@@ -48,7 +48,7 @@ class Testalbum(unittest.TestCase):
         album = self.__album(
             "H1",
             "주혜인",
-            "https://image.genie.co.kr/Y/IMAGE/IMG_ALBUM/084/019/740/84019740_1688692234715_1_600x600.JPG/dims/resize/Q_80,0",
+            "http://album.png",
             date(2001, 3, 13),
         )
 
@@ -59,7 +59,7 @@ class Testalbum(unittest.TestCase):
         album = self.__album(
             "H1",
             "주혜인",
-            "https://image.genie.co.kr/Y/IMAGE/IMG_ALBUM/084/019/740/84019740_1688692234715_1_600x600.JPG/dims/resize/Q_80,0",
+            "http://album.png",
             date(2001, 3, 13),
         )
 
@@ -70,19 +70,19 @@ class Testalbum(unittest.TestCase):
         album1 = self.__album(
             "H1",
             "주혜인",
-            "https://image.genie.co.kr/Y/IMAGE/IMG_ALBUM/084/019/740/84019740_1688692234715_1_600x600.JPG/dims/resize/Q_80,0",
+            "http://album.png",
             date(2001, 3, 13),
         )
         album2 = self.__album(
             "H2",
             "서민석",
-            "https://image.genie.co.kr/Y/IMAGE/IMG_ALBUM/084/019/740/84019740_1688692234715_1_600x600.JPG/dims/resize/Q_80,0",
+            "http://album.png",
             date(2005, 12, 8),
         )
         album3 = self.__album(
             "H3",
             "이준영",
-            "https://image.genie.co.kr/Y/IMAGE/IMG_ALBUM/084/019/740/84019740_1688692234715_1_600x600.JPG/dims/resize/Q_80,0",
+            "http://album.png",
             date(2000, 3, 15),
         )
 
