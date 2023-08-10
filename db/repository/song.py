@@ -38,12 +38,12 @@ class SongRepository:
         return saved.to_dto()
 
     def delete_by_genie_id(self, genie_id: str) -> None:
-        query_set = SongDocument.objects(genie_id=genie_id)
+        song: SongDocument = SongDocument.objects(genie_id=genie_id).first()
 
-        if not query_set:
+        if not song:
             raise NotFoundSongException(f"Can't find song document: genie_id={genie_id}")
 
-        query_set.delete()
+        song.delete()
 
     def find_by_genie_id(self, genie_id: str) -> Song | None:
         song: SongDocument = SongDocument.objects(genie_id=genie_id).first()

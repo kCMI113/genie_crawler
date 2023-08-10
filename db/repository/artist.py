@@ -12,7 +12,7 @@ class ArtistRepository:
         return saved.to_dto()
 
     def delete_by_genie_id(self, genie_id: str) -> None:
-        artist: ArtistDocument = ArtistDocument.objects(genie_id=genie_id)
+        artist: ArtistDocument = ArtistDocument.objects(genie_id=genie_id).first()
 
         if not artist:
             raise NotFoundArtistException(f"Can't find artist document: genie_id={genie_id}")

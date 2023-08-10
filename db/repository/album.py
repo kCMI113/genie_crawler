@@ -13,7 +13,7 @@ class AlbumRepository:
         return saved.to_dto()
 
     def delete_by_genie_id(self, genie_id: str) -> None:
-        album: AlbumDocument = AlbumDocument.objects(genie_id=genie_id)
+        album: AlbumDocument = AlbumDocument.objects(genie_id=genie_id).first()
 
         if not album:
             raise NotFoundAlbumException(f"Can't find Album document: genie_id={genie_id}")

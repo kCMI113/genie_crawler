@@ -35,7 +35,7 @@ class PlaylistRepository:
         return saved.to_dto()
 
     def delete_by_genie_id(self, genie_id: str) -> None:
-        playlist: PlaylistDocument = PlaylistDocument.objects(genie_id=genie_id)
+        playlist: PlaylistDocument = PlaylistDocument.objects(genie_id=genie_id).first()
 
         if not playlist:
             raise NotFoundPlaylistException(f"Can't find playlist document: genie_id={genie_id}")
