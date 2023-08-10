@@ -1,7 +1,7 @@
 from mongoengine import QuerySet
-from ..document import AlbumDocument, ArtistDocument, PlaylistDocument, SongDocument, UserDocument
-from ...dto.model import Album, Artist, Playlist, Song, User
-from ..exception import NotFoundAlbumException, NotFoundArtistException, NotFoundPlaylistException, NotFoundSongException, NotFoundUserException
+from ..exception import NotFoundAlbumException, NotFoundArtistException, NotFoundPlaylistException, NotFoundSongException
+from ..document import AlbumDocument, ArtistDocument, PlaylistDocument, SongDocument
+from dto.model import Album, Artist, Playlist, Song
 
 
 def find_album_doc_by_dto(album: Album) -> AlbumDocument:
