@@ -51,7 +51,7 @@ class PlaylistRepository:
         return playlist.to_dto()
 
     def find_by_updated_at_gte(self, query_dt: datetime) -> list[Playlist]:
-        playlists: QuerySet[PlaylistDocument] = PlaylistDocument.objects(upated_at__gte=query_dt)
+        playlists: QuerySet[PlaylistDocument] = PlaylistDocument.objects(updated_at__gte=query_dt)
 
         if not playlists:
             return None

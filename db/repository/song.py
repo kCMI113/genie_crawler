@@ -52,7 +52,7 @@ class SongRepository:
         return song.to_dto()
 
     def find_by_updated_at_gte(self, query_dt: datetime) -> list[Song]:
-        songs: QuerySet[SongDocument] = SongDocument.objects(upated_at__gte=query_dt)
+        songs: QuerySet[SongDocument] = SongDocument.objects(updated_at__gte=query_dt)
 
         if not songs:
             return None
