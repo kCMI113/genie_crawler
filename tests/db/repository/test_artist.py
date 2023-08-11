@@ -47,13 +47,10 @@ class TestArtist(unittest.TestCase):
         assert artists == found
 
     def test_find_all(self):
-        artist1 = self.__artist("H1", "주혜인")
-        artist2 = self.__artist("H2", "박동연")
-        artist3 = self.__artist("H3", "강찬미")
+        artists = [self.__artist("H1", "주혜인"), self.__artist("H2", "박동연"), self.__artist("H3", "강찬미")]
 
         found = self.artistRepository.find_all()
-        for artist in [artist1, artist2, artist3]:
-            assert artist in found
+        assert artists == found
 
     def __artist(self, genie_id: str, name: str) -> Artist:
         return self.artistRepository.create_artist(genie_id, name)

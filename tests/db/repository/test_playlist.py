@@ -99,8 +99,7 @@ class TestPlaylist(unittest.TestCase):
         ]
 
         found = self.playlistRepository.find_all()
-        for playlist in playlists:
-            assert playlist in found
+        assert playlists == found
 
     def __song(
         self,

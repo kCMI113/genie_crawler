@@ -92,8 +92,7 @@ class TestSong(unittest.TestCase):
         ]
 
         found = self.songRepository.find_all()
-        for song in songs:
-            assert song in found
+        assert songs == found
 
     def __song(
         self,

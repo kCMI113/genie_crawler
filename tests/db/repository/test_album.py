@@ -75,28 +75,29 @@ class TestAlbum(unittest.TestCase):
         assert albums == found
 
     def test_find_all(self):
-        album1 = self.__album(
-            "H1",
-            "주혜인",
-            "http://album.png",
-            date(2001, 3, 13),
-        )
-        album2 = self.__album(
-            "H2",
-            "서민석",
-            "http://album.png",
-            date(2005, 12, 8),
-        )
-        album3 = self.__album(
-            "H3",
-            "이준영",
-            "http://album.png",
-            date(2000, 3, 15),
-        )
+        albums = [
+            self.__album(
+                "H1",
+                "주혜인",
+                "http://album.png",
+                date(2001, 3, 13),
+            ),
+            self.__album(
+                "H2",
+                "서민석",
+                "http://album.png",
+                date(2005, 12, 8),
+            ),
+            self.__album(
+                "H3",
+                "이준영",
+                "http://album.png",
+                date(2000, 3, 15),
+            ),
+        ]
 
         found = self.albumRepository.find_all()
-        for album in [album1, album2, album3]:
-            assert album in found
+        assert albums == found
 
     def __album(self, genie_id: str, name: str, img_url: str, released_date: date) -> Album:
         return self.albumRepository.create_Album(genie_id, name, img_url, released_date)
