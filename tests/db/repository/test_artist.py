@@ -41,10 +41,10 @@ class TestArtist(unittest.TestCase):
         assert artist == found
 
     def test_find_by_updated_at_gte(self):
-        artist = self.__artist("H1", "주혜인")
+        artists = [self.__artist("H1", "주혜인"), self.__artist("H2", "박동연")]
 
         found = self.artistRepository.find_by_updated_at_gte(datetime(2023, 8, 9, 21, 12, 21))
-        assert artist == found
+        assert artists == found
 
     def test_find_all(self):
         artist1 = self.__artist("H1", "주혜인")

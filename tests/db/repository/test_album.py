@@ -56,15 +56,23 @@ class Testalbum(unittest.TestCase):
         assert album == found
 
     def test_find_by_updated_at_gte(self):
-        album = self.__album(
-            "H1",
-            "주혜인",
-            "http://album.png",
-            date(2001, 3, 13),
-        )
+        albums = [
+            self.__album(
+                "H1",
+                "주혜인",
+                "http://album.png",
+                date(2001, 3, 13),
+            ),
+            self.__album(
+                "H2",
+                "서민석",
+                "http://album.png",
+                date(2005, 12, 8),
+            ),
+        ]
 
         found = self.albumRepository.find_by_updated_at_gte(datetime(2023, 8, 9, 21, 12, 21))
-        assert album == found
+        assert albums == found
 
     def test_find_all(self):
         album1 = self.__album(
