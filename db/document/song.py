@@ -2,10 +2,10 @@ from mongoengine import Document, StringField, ReferenceField, ListField, IntFie
 from dto.model import Song
 from .artist import ArtistDocument
 from .album import AlbumDocument
-from datetime import datetime
+from .mixin.date import CreatedAtMixin, UpdatedAtMixin
 
 
-class SongDocument(Document):
+class SongDocument(CreatedAtMixin, UpdatedAtMixin, Document):
     genie_id = StringField(required=True, unique=True)
     title = StringField(required=True)
     lyrics = StringField(required=True)
@@ -16,8 +16,6 @@ class SongDocument(Document):
     play_cnt = IntField(required=True)
     genres = ListField(StringField(), required=True)
     spotify_url = URLField()
-    created_at = DateTimeField(required=True, default=datetime.utcnow)
-    updated_at = DateTimeField(required=True, default=datetime.utcnow)
 
     def to_dto(self) -> Song:
         return Song(
