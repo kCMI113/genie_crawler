@@ -7,7 +7,7 @@ from db.exception import NotFoundAlbumException
 from datetime import date, datetime, timedelta
 
 
-class Testalbum(unittest.TestCase):
+class TestAlbum(unittest.TestCase):
     albumRepository = AlbumRepository()
 
     @classmethod

@@ -15,7 +15,7 @@ from db.exception import (
 from dto.model import Album, Artist, Song
 
 
-class Songlist(unittest.TestCase):
+class TestSong(unittest.TestCase):
     songRepository = SongRepository()
     artistRepository = ArtistRepository()
     albumRepository = AlbumRepository()
