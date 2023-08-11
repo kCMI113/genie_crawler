@@ -4,7 +4,7 @@ import db
 from dto.model import Album
 from db.repository import AlbumRepository
 from db.exception import NotFoundAlbumException
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 
 class Testalbum(unittest.TestCase):
@@ -71,7 +71,7 @@ class Testalbum(unittest.TestCase):
             ),
         ]
 
-        found = self.albumRepository.find_by_updated_at_gte(datetime(2023, 8, 9, 21, 12, 21))
+        found = self.albumRepository.find_by_updated_at_gte(datetime.now() - timedelta(days=1))
         assert albums == found
 
     def test_find_all(self):
