@@ -5,6 +5,7 @@ from dto.model import Artist
 from db.repository import ArtistRepository
 from db.exception import NotFoundArtistException
 from datetime import datetime, timedelta
+import time
 
 
 class TestArtist(unittest.TestCase):
@@ -41,10 +42,12 @@ class TestArtist(unittest.TestCase):
         assert artist == found
 
     def test_find_by_updated_at_gte(self):
-        artists = [self.__artist("H1", "주혜인"), self.__artist("H2", "박동연")]
+        artist1 = self.__artist("H1", "주혜인")
+        time.sleep(0.01)
+        artist2 = self.__artist("H2", "박동연")
 
-        found = self.artist_repository.find_by_updated_at_gte(datetime.now() - timedelta(days=1))
-        assert artists == found
+        found = self.artist_repository.find_by_updated_at_gte(datetime.utcnow() - timedelta(milliseconds=1))
+        assert [artist2] == found
 
     def test_find_all(self):
         artists = [self.__artist("H1", "주혜인"), self.__artist("H2", "박동연"), self.__artist("H3", "강찬미")]

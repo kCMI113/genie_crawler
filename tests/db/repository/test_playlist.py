@@ -8,6 +8,7 @@ from db.exception import (
     NotFoundSongException,
 )
 from dto.model import Playlist, Song, Artist, Album
+import time
 
 
 class TestPlaylist(unittest.TestCase):
@@ -78,14 +79,12 @@ class TestPlaylist(unittest.TestCase):
         album = self.__album()
         song = self.__song(artist=artist, album=album)
 
-        playlists = [
-            self.__playlist(songs=[song], genie_id="P1"),
-            self.__playlist(songs=[song], genie_id="P2"),
-            self.__playlist(songs=[song], genie_id="P3"),
-        ]
+        playlist1 = self.__playlist(songs=[song], genie_id="P1")
+        time.sleep(0.01)
+        playlist2 = self.__playlist(songs=[song], genie_id="P2")
 
-        found = self.playlist_repository.find_by_updated_at_gte(datetime.now() - timedelta(days=1))
-        assert playlists == found
+        found = self.playlist_repository.find_by_updated_at_gte(datetime.utcnow() - timedelta(milliseconds=1))
+        assert [playlist2] == found
 
     def test_find_all(self):
         artist = self.__artist()

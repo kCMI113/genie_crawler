@@ -13,6 +13,7 @@ from db.exception import (
     NotFoundArtistException,
 )
 from dto.model import Album, Artist, Song
+import time
 
 
 class TestSong(unittest.TestCase):
@@ -73,14 +74,13 @@ class TestSong(unittest.TestCase):
     def test_find_by_updated_at_gte(self):
         artist = self.__artist()
         album = self.__album()
-        songs = [
-            self.__song(artist=artist, album=album, genie_id="S1"),
-            self.__song(artist=artist, album=album, genie_id="S2"),
-            self.__song(artist=artist, album=album, genie_id="S3"),
-        ]
 
-        found = self.song_repository.find_by_updated_at_gte(datetime.now() - timedelta(days=1))
-        assert songs == found
+        song1 = self.__song(artist=artist, album=album, genie_id="S1")
+        time.sleep(0.01)
+        song2 = self.__song(artist=artist, album=album, genie_id="S2")
+
+        found = self.song_repository.find_by_updated_at_gte(datetime.utcnow() - timedelta(milliseconds=1))
+        assert [song2] == found
 
     def test_find_all(self):
         artist = self.__artist()
