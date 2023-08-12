@@ -2,13 +2,13 @@ from mongoengine import DateTimeField, signals
 from datetime import datetime
 
 
-def round_millisecond(dt: datetime):
-    return dt.replace(microsecond=round(dt.microsecond, -3))
+def trunc_millisecond(dt: datetime):
+    return dt.replace(microsecond=dt.microsecond - (dt.microsecond % 1000))
 
 
 def utcnow():
     now = datetime.utcnow()
-    return round_millisecond(now)
+    return trunc_millisecond(now)
 
 
 def update_updated_at(sender, document):
