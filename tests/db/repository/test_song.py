@@ -16,9 +16,9 @@ from dto.model import Album, Artist, Song
 
 
 class TestSong(unittest.TestCase):
-    songRepository = SongRepository()
-    artistRepository = ArtistRepository()
-    albumRepository = AlbumRepository()
+    song_repository = SongRepository()
+    artist_repository = ArtistRepository()
+    album_repository = AlbumRepository()
 
     @classmethod
     def setUp(cls):
@@ -52,14 +52,14 @@ class TestSong(unittest.TestCase):
         album = self.__album()
         song = self.__song(artist=artist, album=album)
 
-        self.songRepository.delete_by_genie_id(song.genie_id)
-        found = self.songRepository.find_by_genie_id(song.genie_id)
+        self.song_repository.delete_by_genie_id(song.genie_id)
+        found = self.song_repository.find_by_genie_id(song.genie_id)
         assert found is None
 
         # not exists song
         self.assertRaises(
             NotFoundSongException,
-            lambda: self.songRepository.delete_by_genie_id(song.genie_id),
+            lambda: self.song_repository.delete_by_genie_id(song.genie_id),
         )
 
     def test_find_by_geine_id(self):
@@ -67,7 +67,7 @@ class TestSong(unittest.TestCase):
         album = self.__album()
         song = self.__song(artist=artist, album=album)
 
-        found = self.songRepository.find_by_genie_id(song.genie_id)
+        found = self.song_repository.find_by_genie_id(song.genie_id)
         assert song == found
 
     def test_find_by_updated_at_gte(self):
@@ -79,7 +79,7 @@ class TestSong(unittest.TestCase):
             self.__song(artist=artist, album=album, genie_id="S3"),
         ]
 
-        found = self.songRepository.find_by_updated_at_gte(datetime.now() - timedelta(days=1))
+        found = self.song_repository.find_by_updated_at_gte(datetime.now() - timedelta(days=1))
         assert songs == found
 
     def test_find_all(self):
@@ -91,7 +91,7 @@ class TestSong(unittest.TestCase):
             self.__song(artist=artist, album=album, genie_id="S3"),
         ]
 
-        found = self.songRepository.find_all()
+        found = self.song_repository.find_all()
         assert songs == found
 
     def __song(
@@ -107,10 +107,10 @@ class TestSong(unittest.TestCase):
         genres: list[str] = ["락"],
         spotify_url: str = "http://song.mp4",
     ) -> Song:
-        return self.songRepository.create_song(genie_id, title, lyrics, album, artist, like_cnt, listener_cnt, play_cnt, genres, spotify_url)
+        return self.song_repository.create_song(genie_id, title, lyrics, album, artist, like_cnt, listener_cnt, play_cnt, genres, spotify_url)
 
     def __artist(self, genie_id: str = "A1", name: str = "주혜인") -> Artist:
-        return self.artistRepository.create_artist(genie_id, name)
+        return self.artist_repository.create_artist(genie_id, name)
 
     def __album(self, genie_id: str = "H1", name: str = "주혜아웃", img_url: str = "http://album.png", released_date: date = date(2000, 3, 15)) -> Album:
-        return self.albumRepository.create_Album(genie_id, name, img_url, released_date)
+        return self.album_repository.create_Album(genie_id, name, img_url, released_date)

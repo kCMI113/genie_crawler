@@ -8,7 +8,7 @@ from datetime import date, datetime, timedelta
 
 
 class TestAlbum(unittest.TestCase):
-    albumRepository = AlbumRepository()
+    album_repository = AlbumRepository()
 
     @classmethod
     def setUp(cls):
@@ -34,14 +34,14 @@ class TestAlbum(unittest.TestCase):
             date(2001, 3, 13),
         )
 
-        self.albumRepository.delete_by_genie_id(album.genie_id)
-        found = self.albumRepository.find_by_genie_id(album.genie_id)
+        self.album_repository.delete_by_genie_id(album.genie_id)
+        found = self.album_repository.find_by_genie_id(album.genie_id)
         assert found is None
 
         # not exists playlist
         self.assertRaises(
             NotFoundAlbumException,
-            lambda: self.albumRepository.delete_by_genie_id(album.genie_id),
+            lambda: self.album_repository.delete_by_genie_id(album.genie_id),
         )
 
     def test_find_by_geine_id(self):
@@ -52,7 +52,7 @@ class TestAlbum(unittest.TestCase):
             date(2001, 3, 13),
         )
 
-        found = self.albumRepository.find_by_genie_id(album.genie_id)
+        found = self.album_repository.find_by_genie_id(album.genie_id)
         assert album == found
 
     def test_find_by_updated_at_gte(self):
@@ -71,7 +71,7 @@ class TestAlbum(unittest.TestCase):
             ),
         ]
 
-        found = self.albumRepository.find_by_updated_at_gte(datetime.now() - timedelta(days=1))
+        found = self.album_repository.find_by_updated_at_gte(datetime.now() - timedelta(days=1))
         assert albums == found
 
     def test_find_all(self):
@@ -96,8 +96,8 @@ class TestAlbum(unittest.TestCase):
             ),
         ]
 
-        found = self.albumRepository.find_all()
+        found = self.album_repository.find_all()
         assert albums == found
 
     def __album(self, genie_id: str, name: str, img_url: str, released_date: date) -> Album:
-        return self.albumRepository.create_Album(genie_id, name, img_url, released_date)
+        return self.album_repository.create_Album(genie_id, name, img_url, released_date)
