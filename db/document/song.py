@@ -1,11 +1,11 @@
-from mongoengine import Document, StringField, ReferenceField, ListField, IntField, URLField, DateTimeField
+from mongoengine import Document, StringField, ReferenceField, ListField, IntField, URLField
 from dto.model import Song
 from .artist import ArtistDocument
 from .album import AlbumDocument
 from .mixin.date import CreatedAtMixin, UpdatedAtMixin
 
 
-class SongDocument(CreatedAtMixin, UpdatedAtMixin, Document):
+class SongDocument(Document, CreatedAtMixin, UpdatedAtMixin):
     genie_id = StringField(required=True, unique=True)
     title = StringField(required=True)
     lyrics = StringField(required=True)

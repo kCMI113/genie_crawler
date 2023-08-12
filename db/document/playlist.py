@@ -3,7 +3,6 @@ from mongoengine import (
     StringField,
     IntField,
     ListField,
-    DateTimeField,
     ReferenceField,
     ValidationError,
 )
@@ -22,7 +21,7 @@ def should_have_at_least_one_song(songs: list[SongDocument]):
         raise ValidationError("Playlist should have at least one song")
 
 
-class PlaylistDocument(CreatedAtMixin, UpdatedAtMixin, Document):
+class PlaylistDocument(Document, CreatedAtMixin, UpdatedAtMixin):
     genie_id = StringField(required=True)
     title = StringField(required=True)
     subtitle = StringField(required=True)

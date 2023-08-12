@@ -1,10 +1,10 @@
-from mongoengine import Document, StringField, DateTimeField
+from mongoengine import Document, StringField
 
 from dto.model import Artist
 from .mixin.date import CreatedAtMixin, UpdatedAtMixin
 
 
-class ArtistDocument(CreatedAtMixin, UpdatedAtMixin, Document):
+class ArtistDocument(Document, CreatedAtMixin, UpdatedAtMixin):
     genie_id = StringField(required=True, unique=True)
     name = StringField(required=True)
 

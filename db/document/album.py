@@ -4,7 +4,7 @@ from dto.model import Album
 from .mixin.date import CreatedAtMixin, UpdatedAtMixin
 
 
-class AlbumDocument(CreatedAtMixin, UpdatedAtMixin, Document):
+class AlbumDocument(Document, CreatedAtMixin, UpdatedAtMixin):
     genie_id = StringField(required=True, unique=True)
     name = StringField(required=True)
     img_url = URLField()
