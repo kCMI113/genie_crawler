@@ -1,7 +1,7 @@
 from mongoengine import QuerySet
-from ..document import AlbumDocument, ArtistDocument, PlaylistDocument, SongDocument, UserDocument
-from ...dto.model import Album, Artist, Playlist, Song, User
-from ..exception import NotFoundAlbumException, NotFoundArtistException, NotFoundPlaylistException, NotFoundSongException, NotFoundUserException
+from ..exception import NotFoundAlbumException, NotFoundArtistException, NotFoundPlaylistException, NotFoundSongException
+from ..document import AlbumDocument, ArtistDocument, PlaylistDocument, SongDocument
+from dto.model import Album, Artist, Playlist, Song
 
 
 def find_album_doc_by_dto(album: Album) -> AlbumDocument:
@@ -31,7 +31,7 @@ def find_playlist_doc_by_dto(playlist: Playlist) -> PlaylistDocument:
     return playlist
 
 
-def find_playlist_docs_by_dto(playlists: tuple[Playlist]) -> QuerySet[PlaylistDocument]:
+def find_playlist_docs_by_dto(playlists: tuple[Playlist]) -> "QuerySet[PlaylistDocument]":
     playlists_genie_ids = [playlists.genie_id for playlists in playlists]
     query_set: QuerySet[PlaylistDocument] = PlaylistDocument.objects(genie_id__in=playlists_genie_ids)
 
@@ -60,7 +60,7 @@ def find_song_doc_by_dto(song: Song) -> SongDocument:
     return song
 
 
-def find_song_docs_by_dto(songs: tuple[Song]) -> QuerySet[SongDocument]:
+def find_song_docs_by_dto(songs: tuple[Song]) -> "QuerySet[SongDocument]":
     songs_genie_ids = [songs.genie_id for songs in songs]
     query_set: QuerySet[SongDocument] = SongDocument.objects(genie_id__in=songs_genie_ids)
 

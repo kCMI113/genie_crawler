@@ -3,13 +3,12 @@ from mongoengine import (
     StringField,
     IntField,
     ListField,
-    DateTimeField,
     ReferenceField,
     ValidationError,
 )
-from ...dto.model import Playlist
+from dto.model import Playlist
 from .song import SongDocument
-from datetime import datetime
+from .mixin.date import CreatedAtMixin, UpdatedAtMixin
 
 
 def should_have_at_least_one_tag(tags: list[str]):
@@ -22,7 +21,7 @@ def should_have_at_least_one_song(songs: list[SongDocument]):
         raise ValidationError("Playlist should have at least one song")
 
 
-class PlaylistDocument(Document):
+class PlaylistDocument(Document, CreatedAtMixin, UpdatedAtMixin):
     genie_id = StringField(required=True)
     title = StringField(required=True)
     subtitle = StringField(required=True)
@@ -40,8 +39,6 @@ class PlaylistDocument(Document):
         validation=should_have_at_least_one_song,
     )
     img_url = StringField(required=True)
-    created_at = DateTimeField(required=True, default=datetime.utcnow)
-    updated_at = DateTimeField(required=True, default=datetime.utcnow)
 
     def to_dto(self) -> Playlist:
         return Playlist(

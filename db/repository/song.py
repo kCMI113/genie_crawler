@@ -1,5 +1,5 @@
 from ..document import SongDocument
-from ...dto.model import Album, Artist, Song
+from dto.model import Album, Artist, Song
 from ..exception import NotFoundSongException
 from .common import find_album_doc_by_dto, find_artist_doc_by_dto
 from datetime import datetime
@@ -19,7 +19,6 @@ class SongRepository:
         play_cnt: int,
         genres: list[str],
         spotify_url: str,
-        released_date: datetime,
     ) -> Song:
         song = SongDocument(
             genie_id=genie_id,
@@ -32,7 +31,6 @@ class SongRepository:
             play_cnt=play_cnt,
             genres=genres,
             spotify_url=spotify_url,
-            released_date=released_date,
         )
         saved: SongDocument = song.save()
         return saved.to_dto()
@@ -54,7 +52,7 @@ class SongRepository:
         return song.to_dto()
 
     def find_by_updated_at_gte(self, query_dt: datetime) -> list[Song]:
-        songs: QuerySet[SongDocument] = SongDocument.objects(upated_at__gte=query_dt)
+        songs: QuerySet[SongDocument] = SongDocument.objects(updated_at__gte=query_dt)
 
         if not songs:
             return None

@@ -1,6 +1,6 @@
 from ..document import AlbumDocument
 from ..exception import NotFoundAlbumException
-from ...dto.model import Album
+from dto.model import Album
 from datetime import datetime, date
 from mongoengine import QuerySet
 
@@ -29,7 +29,7 @@ class AlbumRepository:
         return album.to_dto()
 
     def find_by_updated_at_gte(self, query_dt: datetime) -> list[Album]:
-        albums: QuerySet[AlbumDocument] = AlbumDocument.objects(upated_at__gte=query_dt)
+        albums: QuerySet[AlbumDocument] = AlbumDocument.objects(updated_at__gte=query_dt)
 
         if not albums:
             return None

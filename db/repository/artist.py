@@ -1,6 +1,6 @@
 from ..document import ArtistDocument
 from ..exception import NotFoundArtistException
-from ...dto.model import Artist
+from dto.model import Artist
 from datetime import datetime
 from mongoengine import QuerySet
 
@@ -28,7 +28,7 @@ class ArtistRepository:
         return artist.to_dto()
 
     def find_by_updated_at_gte(self, query_dt: datetime) -> list[Artist]:
-        artists: QuerySet[ArtistDocument] = ArtistDocument.objects(upated_at__gte=query_dt)
+        artists: QuerySet[ArtistDocument] = ArtistDocument.objects(updated_at__gte=query_dt)
 
         if not artists:
             return None
