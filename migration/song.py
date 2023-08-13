@@ -5,7 +5,7 @@ from db.repository import (
     ArtistRepository,
 )
 from tqdm import tqdm
-from spotify.spotify import get_spotify_url
+from spotify.spotify import getSpotifyUrl
 
 
 class SongCsvMigrate:
@@ -53,7 +53,7 @@ class SongCsvMigrate:
             genres = song_df.iloc[idx]["INFO_GENRE"].replace(" ", "").split("/")
             artist = self.artist_repository.find_by_genie_id(str(song_df.iloc[idx]["ARTIST_ID"]))
             album = self.album_repository.find_by_genie_id(str(song_df.iloc[idx]["ALBUM_ID"]))
-            spotify_url = get_spotify_url(title, artist.name, album.released_date)
+            spotify_url = getSpotifyUrl(title, artist.name, album.released_date)
 
             if not self.song_repository.find_by_genie_id(id):
                 self.song_repository.create_song(id, title, lyrics, album, artist, like_cnt, listener_cnt, play_cnt, genres, spotify_url)
