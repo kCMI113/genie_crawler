@@ -4,8 +4,8 @@ from db.repository import (
     SongRepository,
     ArtistRepository,
 )
-from dto.model import Album, Artist
 from tqdm import tqdm
+from spotify.spotify import get_spotify_url
 
 
 class SongCsvMigrate:
@@ -28,9 +28,6 @@ class SongCsvMigrate:
             if not self.album_repository.find_by_genie_id(id):
                 self.album_repository.create_Album(id, name, img_url, released_date)
 
-    def find_album(self, genie_id: str) -> Album:
-        return
-
     def add_artists(self) -> None:
         print("##### MIGRATING ARTIST TO DB #####")
         artist_df = self.df[["ARTIST_NAME", "ARTIST_ID"]]
@@ -42,13 +39,21 @@ class SongCsvMigrate:
             if not self.artist_repository.find_by_genie_id(id):
                 self.artist_repository.create_artist(id, name)
 
-    def find_artist(self, genie_id: str) -> Artist:
-        # 지니아이디로 쿼리(지니아이디)로 들어온 아티스트 도쿠먼트 찾아서 보내기
-        return
-
     def add_songs(self):
-        # 송 지니아이디(genie_ids:list[str]) 얻어서 그걸로 반복문 돌기
-        # find_artist(id)
-        # find_album(id)
-        # song doc create
-        return
+        print("##### MIGRATING SONG TO DB #####")
+        song_df = self.df
+
+        for idx in tqdm(range(0, len(song_df))):
+            title = song_df.iloc[idx]["SONG_TITLE"]
+            id = str(song_df.iloc[idx]["ARTIST_ID"])
+            lyrics = song_df.iloc[idx]["LYRICS"]
+            listener_cnt = song_df.iloc[idx]["LISTENER_CNT"]
+            like_cnt = song_df.iloc[idx]["SONG_LIKE"]
+            play_cnt = song_df.iloc[idx]["PLAY_CNT"]
+            genres = song_df.iloc[idx]["INFO_GENRE"].replace(" ", "").split("/")
+            artist = self.artist_repository.find_by_genie_id(str(song_df.iloc[idx]["ARTIST_ID"]))
+            album = self.album_repository.find_by_genie_id(str(song_df.iloc[idx]["ALBUM_ID"]))
+            spotify_url = get_spotify_url(title, artist.name, album.released_date)
+
+            if not self.song_repository.find_by_genie_id(id):
+                self.song_repository.create_song(id, title, lyrics, album, artist, like_cnt, listener_cnt, play_cnt, genres, spotify_url)
