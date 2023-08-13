@@ -4,15 +4,14 @@ from .utils import check_substring, check_string
 from config.config import DBConfig
 from datetime import date
 
+config = DBConfig()
+cid = config.spotify_cid
+secret = config.spotify_pwd
+client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret)
+sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager, language="ko")
+
 
 def get_spotify_url(title: str, artist: str, release_date: date) -> str | None:
-    config = DBConfig()
-    cid = config.spotify_cid
-    secret = config.spotify_pwd
-    client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret)
-
-    sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager, language="ko")
-
     search_query = title + " " + artist
     result = sp.search(search_query, limit=4, type="track")
     res_score = -1
