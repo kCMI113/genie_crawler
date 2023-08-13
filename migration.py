@@ -4,9 +4,9 @@ from config.config import DBConfig
 from migration.playlist import PlaylistCsvMigrate
 from migration.song import SongCsvMigrate
 
-INPUT_PATH = "/input"
-PLAYLIST_PATH = os.path.join(INPUT_PATH, "playlists.csv")
-SONG_PATH = os.path.join(INPUT_PATH, "songs.csv")
+INPUT_PATH = "migration/input"
+PLAYLIST_PATH = os.path.join(INPUT_PATH, "playlists_0721.csv")
+SONG_PATH = os.path.join(INPUT_PATH, "join_songs_0726.csv")
 
 
 def main() -> None:
