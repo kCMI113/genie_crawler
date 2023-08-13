@@ -13,8 +13,8 @@ def get_spotify_url(title: str, artist: str, release_date: date) -> str | None:
 
     sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager, language="ko")
 
-    seary_query = title + " " + artist
-    result = sp.search(seary_query, limit=4, type="track")
+    search_query = title + " " + artist
+    result = sp.search(search_query, limit=4, type="track")
     res_score = -1
     url = ""
 
