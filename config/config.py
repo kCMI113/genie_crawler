@@ -8,6 +8,9 @@ class DBConfig(BaseSettings):
     db_name: str
     db_username: str
     db_password: str
+    input_path: str
+    pl_file: str
+    song_file: str
 
     class Config:
         env_file = ".env"

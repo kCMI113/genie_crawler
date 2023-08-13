@@ -4,13 +4,12 @@ from config.config import DBConfig
 from migration.playlist import PlaylistCsvMigrate
 from migration.song import SongCsvMigrate
 
-INPUT_PATH = "migration/input"
-PLAYLIST_PATH = os.path.join(INPUT_PATH, "playlists_0721.csv")
-SONG_PATH = os.path.join(INPUT_PATH, "join_songs_0726.csv")
+config = DBConfig()
+PLAYLIST_PATH = os.path.join(config.input_path, config.pl_file)
+SONG_PATH = os.path.join(config.input_path, config.song_file)
 
 
 def main() -> None:
-    config = DBConfig()
     db.connect(config.db_name, config.db_host, config.db_username, config.db_password)
     song_csv_migrate = SongCsvMigrate(SONG_PATH)
     # playlist_csv_migrate = PlaylistCsvMigrate(PLAYLIST_PATH)
