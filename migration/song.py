@@ -43,10 +43,10 @@ class SongCsvMigrate:
         print("##### MIGRATING SONG TO DB #####")
         song_df = self.df
 
-        for idx in tqdm(range(0, len(song_df))):
+        for idx in tqdm(range(len(song_df))):
             title = song_df.iloc[idx]["SONG_TITLE"]
-            id = str(song_df.iloc[idx]["ARTIST_ID"])
-            lyrics = song_df.iloc[idx]["LYRICS"]
+            id = str(song_df.iloc[idx]["SONG_ID"])
+            lyrics = str(song_df.iloc[idx]["LYRICS"])
             listener_cnt = song_df.iloc[idx]["LISTENER_CNT"]
             like_cnt = song_df.iloc[idx]["SONG_LIKE"]
             play_cnt = song_df.iloc[idx]["PLAY_CNT"]
