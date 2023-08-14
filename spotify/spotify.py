@@ -11,22 +11,23 @@ client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secr
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager, language="ko")
 
 
-def calculateValidScore(item, title, artist, release_date) -> int:
+def calculateValidScore(item, title, artist, release_date) -> (int, str):
     try:
         res_release_date = item["album"]["release_date"]
         res_artist_name = item["artists"][0]["name"]
         res_title = item["name"]
         res_url = item["preview_url"]
-    except TypeError:
-        pass
 
-    score = (
+        score = (
         check_string(res_title, title) / 2
         + check_substring(res_title, title)
         + check_substring(res_artist_name, artist)
         + (res_release_date == release_date)
-    )
-    return score, res_url
+        )
+        return score, res_url
+    
+    except TypeError:
+        return -1, None
 
 
 def checkReleaseDate(item, release_date) -> str | None:
@@ -57,7 +58,7 @@ def getSpotifyUrl(title: str, artist: str, release_date: date) -> str | None:
         url = None
 
     # If url is None, recheck first in search results with release date
-    if not url:
+    if not url and len(result["tracks"]["items"])>0:
         return checkReleaseDate(result["tracks"]["items"][0], release_date)
 
     return url
