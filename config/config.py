@@ -9,8 +9,8 @@ class DBConfig(BaseSettings):
     db_username: str
     db_password: str
     input_path: str
-    pl_file: str
-    song_file: str
+    pl_file: str = "playlists_0721.csv"
+    song_file: str = "join_songs_0726.csv"
 
     class Config:
         env_file = ".env"
