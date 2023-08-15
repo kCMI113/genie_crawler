@@ -2,12 +2,10 @@ import re
 import requests
 from logging import Logger
 from bs4 import BeautifulSoup
-from omegaconf import DictConfig
-
-from src.utils import resizeImg
+from ..src.utils import resizeImg
 
 
-def getSongInfo(song_list_wrap, config: DictConfig, log: Logger) -> list[dict]:
+def getSongInfo(song_list_wrap, config, log: Logger) -> list[dict]:
     list_wrap_table = song_list_wrap.select_one(".list-wrap")
     table_tbody = list_wrap_table.find("tbody")
 
@@ -38,9 +36,9 @@ def getSongInfo(song_list_wrap, config: DictConfig, log: Logger) -> list[dict]:
         info = {
             "IMG_PATH": all_val[0],
             "SONG_TITLE": all_val[1],
-            "SONG_ID": all_val[2],
+            "SONG_ID": str(all_val[2]),
             "ARTIST_NAME": all_val[3],
-            "ARTIST_ID": all_val[4],
+            "ARTIST_ID": str(all_val[4]),
             "ALBUM_TITLE": all_val[5],
             "ALBUM_ID": all_val[6],
         }
@@ -49,7 +47,7 @@ def getSongInfo(song_list_wrap, config: DictConfig, log: Logger) -> list[dict]:
     return songs
 
 
-def getPlaylistInfo(id: int, url: str, config: DictConfig, songs_list: list[dict], log: Logger) -> dict:
+def getPlaylistInfo(id: int, url: str, config, songs_list: list[dict], log: Logger) -> dict:
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36"}
     r = requests.get(url, headers=headers)
     soup = BeautifulSoup(r.text, "html.parser")

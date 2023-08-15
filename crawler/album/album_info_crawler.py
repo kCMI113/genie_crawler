@@ -1,13 +1,12 @@
 from datetime import date
 from logging import Logger
-from omegaconf import dictconfig
 from bs4 import BeautifulSoup
 import requests
 
-from src.utils import resizeImg
+from ..src.utils import resizeImg
 
 
-def crawlAlbumInfo(album_id: int, config: dictconfig, album_detail_url: str, log: Logger) -> dict:
+def crawlAlbumInfo(album_id: int, config, album_detail_url: str, log: Logger) -> dict:
     url = f"{album_detail_url}{album_id}"
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36"}
     r = requests.get(url, headers=headers)
