@@ -29,7 +29,7 @@ def crawlPlaylist() -> (pd.DataFrame, pd.DataFrame):
     err_list = []
 
     # start searching
-    for id in tqdm(range(start_idx, end_idx)):
+    for id in tqdm(range(start_idx - 10, end_idx + 10)):
         try:
             pl_url = PLAYLIST_URL + str(id)
             pl_info = getPlaylistInfo(id, pl_url, config, songs_list, log)
