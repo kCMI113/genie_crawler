@@ -24,7 +24,6 @@ def crawlPlaylist() -> (pd.DataFrame, pd.DataFrame):
     # get last playlist id
     log.info("Check Last playlist item id ...")
     end_idx = getLastPlaylistId(PLAYLIST_ORIGIN_URL)
-    end_idx = 13183
     log.info("-- Last playlist item id is %d !!!", end_idx)
 
     err_list = []
