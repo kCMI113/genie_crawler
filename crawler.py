@@ -17,7 +17,7 @@ def main() -> None:
 
     pl_df, song_df = crawlPlaylist()
     song_df = pd.merge(song_df, crawlSong(list(song_df["SONG_ID"])), on="SONG_ID", how="inner")
-    song_df = pd.merge(song_df, crawlAlbum(list(song_df["ALBUM_ID"])), on="SONG_ID", how="inner")
+    song_df = pd.merge(song_df, crawlAlbum(list(song_df["ALBUM_ID"])), on="ALBUM_ID", how="inner")
 
     crawler_migrate = CrawlerMigrate(song_df, pl_df)
 

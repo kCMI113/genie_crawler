@@ -41,7 +41,7 @@ class CrawlerMigrate:
 
         for idx in tqdm(range(len(artist_df))):
             id = artist_df.iloc[idx]["ARTIST_ID"]
-            
+
             if not self.artist_repository.find_by_genie_id(id):
                 name = artist_df.iloc[idx]["ARTIST_NAME"]
 
@@ -66,7 +66,6 @@ class CrawlerMigrate:
 
                 self.song_repository.create_song(id, title, lyrics, album, artist, like_cnt, listener_cnt, play_cnt, genres, spotify_url)
 
-
     def find_song_docs(self, genie_ids: list[str]) -> list[Song]:
         songs = []
         for genie_id in genie_ids:
@@ -80,18 +79,16 @@ class CrawlerMigrate:
         print("##### MIGRATING PLAYLIST TO DB #####")
 
         for idx in tqdm(range(len(self.pl_df))):
-            id = self.pl_df.iloc[idx]["playlist_id"]
+            id = self.pl_df.iloc[idx]["PLAYLIST_ID"]
 
             if not self.playlist_repository.find_by_genie_id(id):
-                title = self.pl_df.iloc[idx]["playlist_title"]
-                subtitle = self.pl_df.iloc[idx]["playlist_subtitle"]
-                like_cnt = self.pl_df.iloc[idx]["playlist_likecount"]
-                view_cnt = self.pl_df.iloc[idx]["playlist_view"]
-                tags = self.pl_df.iloc[idx]["playlist_tags"]
-                img_url = self.pl_df.iloc[idx]["playlist_img_url"]
-                songs = self.find_song_docs(self.pl_df.iloc[idx]["playlist_songs"])
+                title = self.pl_df.iloc[idx]["PLAYLIST_TITLE"]
+                subtitle = self.pl_df.iloc[idx]["PLAYLIST_SUBTITLE"]
+                like_cnt = self.pl_df.iloc[idx]["PLAYLIST_LIKECOUNT"]
+                view_cnt = self.pl_df.iloc[idx]["PLAYLIST_VIEW"]
+                tags = self.pl_df.iloc[idx]["PLAYLIST_TAGS"]
+                img_url = self.pl_df.iloc[idx]["PLAYLIST_IMG_URL"]
+                songs = self.find_song_docs(self.pl_df.iloc[idx]["PLAYLIST_SONGS"])
                 song_cnt = len(songs)
-            
-                self.playlist_repository.create_playlist(id, title, subtitle, song_cnt, like_cnt, view_cnt, tags, songs, img_url)
 
-       
+                self.playlist_repository.create_playlist(id, title, subtitle, song_cnt, like_cnt, view_cnt, tags, songs, img_url)
