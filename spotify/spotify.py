@@ -40,6 +40,7 @@ def checkReleaseDate(item, release_date) -> str | None:
 
 def getSpotifyUrl(title: str, artist: str, release_date: date) -> str | None:
     search_query = title + " " + artist
+    search_query = search_query[:min(len(search_query), 200)]
     result = sp.search(search_query, limit=4, type="track")
     res_score = -1
     standard_score = 2
