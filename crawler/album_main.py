@@ -1,33 +1,27 @@
-import os
-import hydra
 import pandas as pd
 from tqdm import tqdm
+from config.config import GenieConfig
 from tqdm.contrib.logging import logging_redirect_tqdm
-from omegaconf import DictConfig
-from src.utils import getLogger
-from album.album_info_crawler import crawlAlbumInfo
+from .src.utils import getLogger
+from .album.album_info_crawler import crawlAlbumInfo
 
+ALBUM_DETAIL_URL = "https://www.genie.co.kr/detail/albumInfo?axnm="
+config = GenieConfig()
 
-@hydra.main(version_base="1.2", config_path="configs", config_name="album.yaml")
-def main(config: DictConfig = None) -> None:
+def crawlAlbum(album_ids: list[str]) -> pd.DataFrame:
     # log file setting
     log = getLogger()
     log.propagate = False
-
-    # load base song info
-    song_info_path = os.path.join(config.out_dir, config.song_info_filename)
-    log.info("Load song_info files to retrieve song_id from %s", song_info_path)
-    song_info_df = pd.read_csv(song_info_path, dtype={"ALBUM_ID": int})
-    album_ids: list[int] = song_info_df["ALBUM_ID"].unique().tolist()
 
     # crawling playlists and songs
     log.info("Start album info crawling ...")
     album_infos = []
     failed_crawling_album_ids = []
+    
     for album_id in tqdm(album_ids, position=0, leave=True):
         with logging_redirect_tqdm():
             try:
-                album_info = crawlAlbumInfo(album_id, config, config.album_detail_url, log)
+                album_info = crawlAlbumInfo(album_id, config, ALBUM_DETAIL_URL, log)
                 album_infos.append(album_info)
             except Exception as e:
                 log.exception(e)
@@ -36,11 +30,7 @@ def main(config: DictConfig = None) -> None:
     if failed_crawling_album_ids:
         log.warn("Failed crawling song ids : %s", str(failed_crawling_album_ids))
 
-    csv_path = os.path.join(config.out_dir, config.album_info_filename)
-    log.info("Save album_infos to %s", csv_path)
     album_infos_df = pd.DataFrame(album_infos)
-    album_infos_df.to_csv(csv_path, index=False)
 
+    return album_infos_df
 
-if __name__ == "__main__":
-    main()
