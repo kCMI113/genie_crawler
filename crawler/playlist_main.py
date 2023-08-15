@@ -8,6 +8,7 @@ PLAYLIST_ORIGIN_URL = "https://www.genie.co.kr/playlist/popular?sortOrd=RDD"
 PLAYLIST_URL = "https://www.genie.co.kr/playlist/detailView?plmSeq="
 config = GenieConfig()
 
+
 def crawlPlaylist() -> (pd.DataFrame, pd.DataFrame):
     # logger setting
     log = getLogger()
@@ -23,12 +24,13 @@ def crawlPlaylist() -> (pd.DataFrame, pd.DataFrame):
     # get last playlist id
     log.info("Check Last playlist item id ...")
     end_idx = getLastPlaylistId(PLAYLIST_ORIGIN_URL)
+    end_idx = 13183
     log.info("-- Last playlist item id is %d !!!", end_idx)
 
     err_list = []
 
     # start searching
-    for id in tqdm(range(start_idx-10, end_idx+10)):
+    for id in tqdm(range(start_idx, end_idx)):
         try:
             pl_url = PLAYLIST_URL + str(id)
             pl_info = getPlaylistInfo(id, pl_url, config, songs_list, log)
