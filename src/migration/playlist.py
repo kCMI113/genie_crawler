@@ -31,7 +31,7 @@ class PlaylistCsvMigrate:
                 subtitle = pl_df.iloc[idx]["playlist_subtitle"]
                 like_cnt = pl_df.iloc[idx]["playlist_likecount"]
                 view_cnt = pl_df.iloc[idx]["playlist_view"]
-                tags = pl_df.iloc[idx]["playlist_tags"]
+                tags = ast.literal_eval(pl_df.iloc[idx]["playlist_tags"])
                 img_url = pl_df.iloc[idx]["playlist_img_url"]
                 songs = self.find_song_docs(ast.literal_eval(pl_df.iloc[idx]["playlist_songs"]))
                 song_cnt = len(songs)
