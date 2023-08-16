@@ -1,11 +1,10 @@
 import os
-import db
 import pandas as pd
-from config.config import DBConfig
-from migration.crawler import CrawlerMigrate
-from crawler.album_main import crawlAlbum
-from crawler.song_main import crawlSong
-from crawler.playlist_main import crawlPlaylist
+from src.config import DBConfig
+from src.db import db
+from src.migration import CrawlerMigrate
+from src.crawler import crawlAlbum, crawlPlaylist, crawlSong
+
 
 config = DBConfig()
 PLAYLIST_PATH = os.path.join(config.input_path, config.pl_file)
