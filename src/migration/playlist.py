@@ -6,7 +6,7 @@ import ast
 
 class PlaylistCsvMigrate:
     def __init__(self, path: str):
-        self.df = pd.read_csv(path)
+        self.df = pd.read_csv(path, dtype={"playlist_id": str})
         self.song_repository = SongRepository()
         self.playlist_repository = PlaylistRepository()
 
