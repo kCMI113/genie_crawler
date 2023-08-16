@@ -9,7 +9,7 @@ class DBConfig(BaseSettings):
     db_name: str
     db_username: str
     db_password: str
-    input_path: str = "migration/input"
+    input_path: str = "src/migration/input"
     pl_file: str = "playlists_0721.csv"
     song_file: str = "join_songs_0726_unique.csv"
 
