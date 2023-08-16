@@ -85,4 +85,5 @@ class CrawlerMigrate:
                 songs = self.find_song_docs(self.pl_df.iloc[idx]["PLAYLIST_SONGS"])
                 song_cnt = len(songs)
 
-                self.playlist_repository.create_playlist(id, title, subtitle, song_cnt, like_cnt, view_cnt, tags, songs, img_url)
+                if song_cnt:
+                    self.playlist_repository.create_playlist(id, title, subtitle, song_cnt, like_cnt, view_cnt, tags, songs, img_url)

@@ -1,11 +1,12 @@
 import pandas as pd
 from src.db import SongRepository, PlaylistRepository, Song
 from tqdm import tqdm
+import ast
 
 
 class PlaylistCsvMigrate:
     def __init__(self, path: str):
-        self.df = pd.read_csv(path)
+        self.df = pd.read_csv(path, dtype={"playlist_id": str})
         self.song_repository = SongRepository()
         self.playlist_repository = PlaylistRepository()
 
@@ -30,9 +31,10 @@ class PlaylistCsvMigrate:
                 subtitle = pl_df.iloc[idx]["playlist_subtitle"]
                 like_cnt = pl_df.iloc[idx]["playlist_likecount"]
                 view_cnt = pl_df.iloc[idx]["playlist_view"]
-                tags = pl_df.iloc[idx]["playlist_tags"]
+                tags = ast.literal_eval(pl_df.iloc[idx]["playlist_tags"])
                 img_url = pl_df.iloc[idx]["playlist_img_url"]
-                songs = self.find_song_docs(pl_df.iloc[idx]["playlist_songs"])
+                songs = self.find_song_docs(ast.literal_eval(pl_df.iloc[idx]["playlist_songs"]))
                 song_cnt = len(songs)
 
-                self.playlist_repository.create_playlist(id, title, subtitle, song_cnt, like_cnt, view_cnt, tags, songs, img_url)
+                if song_cnt:
+                    self.playlist_repository.create_playlist(id, title, subtitle, song_cnt, like_cnt, view_cnt, tags, songs, img_url)
