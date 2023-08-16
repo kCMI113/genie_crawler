@@ -1,6 +1,7 @@
 import pandas as pd
 from src.db import SongRepository, PlaylistRepository, Song
 from tqdm import tqdm
+import ast
 
 
 class PlaylistCsvMigrate:
@@ -32,7 +33,7 @@ class PlaylistCsvMigrate:
                 view_cnt = pl_df.iloc[idx]["playlist_view"]
                 tags = pl_df.iloc[idx]["playlist_tags"]
                 img_url = pl_df.iloc[idx]["playlist_img_url"]
-                songs = self.find_song_docs(pl_df.iloc[idx]["playlist_songs"])
+                songs = self.find_song_docs(ast.literal_eval(pl_df.iloc[idx]["playlist_songs"]))
                 song_cnt = len(songs)
 
                 if song_cnt:
