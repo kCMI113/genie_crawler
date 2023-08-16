@@ -2,7 +2,7 @@ import re
 import requests
 from logging import Logger
 from bs4 import BeautifulSoup
-from ..src.utils import resizeImg
+from ..utils import resizeImg
 
 
 def getSongInfo(song_list_wrap, config, log: Logger) -> list[dict]:
@@ -60,7 +60,7 @@ def getPlaylistInfo(id: int, url: str, config, songs_list: list[dict], log: Logg
     log.info("title: %s", title)
 
     # playlist description
-    title_sub = info.select_one(".info__title--sub").text
+    title_sub = info.select_one(".info__title--sub").text.strip()
     log.info("title_sub: %s", title_sub)
 
     info_data = info.select_one(".info__data")

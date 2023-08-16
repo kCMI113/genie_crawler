@@ -3,10 +3,7 @@ from bs4 import BeautifulSoup
 import requests
 import textwrap
 
-from .song_detail.song_info_crawler import crawlSongInfo
-from .song_detail.song_daliy_chart_crawler import crawlSongDailyChart
-from .song_detail.song_lyrics_crawler import crawlSongLyrics
-from .song_detail.song_like_crawler import crawlSongLike
+from .song_detail import crawlSongInfo, crawlSongDailyChart, crawlSongLyrics, crawlSongLike
 
 
 def crawlSongDetail(song_id: int, song_detail_url: str, log: Logger) -> dict:

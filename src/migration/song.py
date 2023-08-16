@@ -1,11 +1,7 @@
 import pandas as pd
-from db.repository import (
-    AlbumRepository,
-    SongRepository,
-    ArtistRepository,
-)
 from tqdm import tqdm
-from spotify.spotify import getSpotifyUrl
+from src.db import AlbumRepository, SongRepository, ArtistRepository
+from .spotify import getSpotifyUrl
 
 
 class SongCsvMigrate:
@@ -35,7 +31,7 @@ class SongCsvMigrate:
 
         for idx in tqdm(range(0, len(artist_df))):
             id = str(artist_df.iloc[idx]["ARTIST_ID"])
-            
+
             if not self.artist_repository.find_by_genie_id(id):
                 name = artist_df.iloc[idx]["ARTIST_NAME"]
 

@@ -1,6 +1,5 @@
 import pandas as pd
-from db.repository import SongRepository, PlaylistRepository
-from dto.model import Song
+from src.db import SongRepository, PlaylistRepository, Song
 from tqdm import tqdm
 
 
@@ -35,7 +34,5 @@ class PlaylistCsvMigrate:
                 img_url = pl_df.iloc[idx]["playlist_img_url"]
                 songs = self.find_song_docs(pl_df.iloc[idx]["playlist_songs"])
                 song_cnt = len(songs)
-            
-                self.playlist_repository.create_playlist(id, title, subtitle, song_cnt, like_cnt, view_cnt, tags, songs, img_url)
 
-       
+                self.playlist_repository.create_playlist(id, title, subtitle, song_cnt, like_cnt, view_cnt, tags, songs, img_url)

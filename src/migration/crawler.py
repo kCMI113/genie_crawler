@@ -1,15 +1,9 @@
 import pandas as pd
-from db.repository import SongRepository, PlaylistRepository
-from dto.model import Song
+from ..db import SongRepository, PlaylistRepository, AlbumRepository, ArtistRepository, Song
 from tqdm import tqdm
 import pandas as pd
-from db.repository import (
-    AlbumRepository,
-    SongRepository,
-    ArtistRepository,
-)
 from tqdm import tqdm
-from spotify.spotify import getSpotifyUrl
+from .spotify import getSpotifyUrl
 
 
 class CrawlerMigrate:

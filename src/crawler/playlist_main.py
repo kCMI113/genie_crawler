@@ -1,8 +1,8 @@
 from tqdm import tqdm
 import pandas as pd
-from config.config import GenieConfig
-from .src.utils import getLogger, getLastPlaylistId
-from .playlist.playlist_crawler import getPlaylistInfo
+from ..config import GenieConfig
+from .utils import getLogger, getLastPlaylistId
+from .playlist import getPlaylistInfo
 
 PLAYLIST_ORIGIN_URL = "https://www.genie.co.kr/playlist/popular?sortOrd=RDD"
 PLAYLIST_URL = "https://www.genie.co.kr/playlist/detailView?plmSeq="
@@ -29,7 +29,7 @@ def crawlPlaylist() -> (pd.DataFrame, pd.DataFrame):
     err_list = []
 
     # start searching
-    for id in tqdm(range(start_idx - 10, end_idx + 10)):
+    for id in tqdm(range(15725, 15725 + 1)):
         try:
             pl_url = PLAYLIST_URL + str(id)
             pl_info = getPlaylistInfo(id, pl_url, config, songs_list, log)

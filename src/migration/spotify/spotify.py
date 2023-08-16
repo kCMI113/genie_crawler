@@ -1,7 +1,7 @@
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from .utils import check_substring, check_string
-from config.config import DBConfig
+from ...config import DBConfig
 from datetime import date
 
 config = DBConfig()
@@ -19,13 +19,13 @@ def calculateValidScore(item, title, artist, release_date) -> (int, str):
         res_url = item["preview_url"]
 
         score = (
-        check_string(res_title, title) / 2
-        + check_substring(res_title, title)
-        + check_substring(res_artist_name, artist)
-        + (res_release_date == release_date)
+            check_string(res_title, title) / 2
+            + check_substring(res_title, title)
+            + check_substring(res_artist_name, artist)
+            + (res_release_date == release_date)
         )
         return score, res_url
-    
+
     except TypeError:
         return -1, None
 
@@ -40,7 +40,7 @@ def checkReleaseDate(item, release_date) -> str | None:
 
 def getSpotifyUrl(title: str, artist: str, release_date: date) -> str | None:
     search_query = title + " " + artist
-    search_query = search_query[:min(len(search_query), 200)]
+    search_query = search_query[: min(len(search_query), 200)]
     result = sp.search(search_query, limit=4, type="track")
     res_score = -1
     standard_score = 2
@@ -59,7 +59,7 @@ def getSpotifyUrl(title: str, artist: str, release_date: date) -> str | None:
         url = None
 
     # If url is None, recheck first in search results with release date
-    if not url and len(result["tracks"]["items"])>0:
+    if not url and len(result["tracks"]["items"]) > 0:
         return checkReleaseDate(result["tracks"]["items"][0], release_date)
 
     return url
