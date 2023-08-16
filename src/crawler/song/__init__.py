@@ -1,0 +1,1 @@
+from .song_detail_crawler import crawlSongDetail
