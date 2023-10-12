@@ -13,6 +13,8 @@ class DBConfig(BaseSettings):
     pl_file: str = "playlists_0721.csv"
     song_file: str = "join_songs_0726_unique.csv"
 
+    use_latest_start_idx: bool = False
+
     class Config:
         env_file = ".env"
 

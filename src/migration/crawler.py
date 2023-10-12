@@ -1,8 +1,6 @@
 import pandas as pd
 from ..db import SongRepository, PlaylistRepository, AlbumRepository, ArtistRepository, Song
 from tqdm import tqdm
-import pandas as pd
-from tqdm import tqdm
 from .spotify import getSpotifyUrl
 
 
