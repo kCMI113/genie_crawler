@@ -1,9 +1,9 @@
 import os
 from src.db import db
-from src.config import DBConfig
+from src.config import GenieConfig
 from src.migration import PlaylistCsvMigrate, SongCsvMigrate
 
-config = DBConfig()
+config = GenieConfig()
 PLAYLIST_PATH = os.path.join(config.input_path, config.pl_file)
 SONG_PATH = os.path.join(config.input_path, config.song_file)
 
