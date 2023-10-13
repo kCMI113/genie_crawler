@@ -4,11 +4,15 @@ from src.config import GenieConfig
 from src.db import db, PlaylistRepository
 from src.migration import CrawlerMigrate
 from src.crawler import crawlAlbum, crawlPlaylist, crawlSong
+from src.crawler.utils import getLogger
 
 
+logger = getLogger()
 config = GenieConfig()
 PLAYLIST_PATH = os.path.join(config.input_path, config.pl_file)
 SONG_PATH = os.path.join(config.input_path, config.song_file)
+OUTPUT_PLAYLIST_PATH = os.path.join(config.output_path, config.output_pl_file)
+OUTPUT_SONG_PATH = os.path.join(config.output_path, config.output_song_file)
 
 
 def main() -> None:
@@ -21,6 +25,11 @@ def main() -> None:
     pl_df, song_df = crawlPlaylist(config)
     song_df = pd.merge(song_df, crawlSong(list(song_df["SONG_ID"])), on="SONG_ID", how="inner")
     song_df = pd.merge(song_df, crawlAlbum(list(song_df["ALBUM_ID"])), on="ALBUM_ID", how="inner")
+
+    logger.log("Dump crawled playlist to csv: %s", OUTPUT_PLAYLIST_PATH)
+    pl_df.to_csv(OUTPUT_PLAYLIST_PATH, index=False)
+    logger.log("Dump crawled song to csv: %s", OUTPUT_SONG_PATH)
+    song_df.to_csv(OUTPUT_SONG_PATH, index=False)
 
     crawler_migrate = CrawlerMigrate(song_df, pl_df)
 

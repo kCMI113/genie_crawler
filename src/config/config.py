@@ -27,5 +27,10 @@ class GenieConfig(BaseSettings):
     pl_file: str = "playlists_0721.csv"
     song_file: str = "join_songs_0726_unique.csv"
 
+    # for output crawled csv
+    output_path: str = "output/crawler"
+    output_pl_file: str = "playlists_1014.csv"
+    output_song_file: str = "songs_1014.csv"
+
     class Config:
         env_file = ".env"
