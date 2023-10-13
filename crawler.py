@@ -27,9 +27,9 @@ def main() -> None:
     song_df = pd.merge(song_df, crawlAlbum(list(song_df["ALBUM_ID"])), on="ALBUM_ID", how="inner")
 
     os.makedirs(config.output_path, exist_ok=True)
-    logger.log("Dump crawled playlist to csv: %s", OUTPUT_PLAYLIST_PATH)
+    logger.info("Dump crawled playlist to csv: %s", OUTPUT_PLAYLIST_PATH)
     pl_df.to_csv(OUTPUT_PLAYLIST_PATH, index=False)
-    logger.log("Dump crawled song to csv: %s", OUTPUT_SONG_PATH)
+    logger.info("Dump crawled song to csv: %s", OUTPUT_SONG_PATH)
     song_df.to_csv(OUTPUT_SONG_PATH, index=False)
 
     crawler_migrate = CrawlerMigrate(song_df, pl_df)
