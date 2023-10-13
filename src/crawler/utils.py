@@ -1,7 +1,5 @@
 import os
 import logging
-import pandas as pd
-from omegaconf import DictConfig
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
