@@ -1,10 +1,10 @@
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from .utils import check_substring, check_string
-from ...config import DBConfig
+from ...config import GenieConfig
 from datetime import date
 
-config = DBConfig()
+config = GenieConfig()
 cid = config.spotify_cid
 secret = config.spotify_pwd
 client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret)
