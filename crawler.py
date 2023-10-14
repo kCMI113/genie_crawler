@@ -12,7 +12,6 @@ config = GenieConfig()
 PLAYLIST_PATH = os.path.join(config.input_path, config.pl_file)
 SONG_PATH = os.path.join(config.input_path, config.song_file)
 OUTPUT_PLAYLIST_PATH = os.path.join(config.output_path, config.output_pl_file)
-OUTPUT_SONG_PATH = os.path.join(config.output_path, config.output_song_file)
 
 
 def main() -> None:
