@@ -17,6 +17,8 @@ OUTPUT_PLAYLIST_PATH = os.path.join(config.output_path, config.output_pl_file)
 def main() -> None:
     db.connect(config.db_name, config.db_host, config.db_username, config.db_password)
 
+    logger.info("print config: " + str(config))
+
     if config.use_latest_start_idx:
         config.start_idx = int(PlaylistRepository().find_latest_created_playlist().genie_id) + 1
         print(f"start_idx: {config.start_idx}")
