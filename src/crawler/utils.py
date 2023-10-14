@@ -1,5 +1,6 @@
 import os
 import logging
+import sys
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -15,7 +16,9 @@ def createDirectory(dir: str) -> None:
 
 
 def getLogger() -> logging.Logger:
-    return logging.getLogger()
+    logger = logging.getLogger()
+    logger.addHandler(logging.StreamHandler(sys.stdout))
+    return logger
 
 
 def resizeImg(path: str, size: int, max_size: int) -> str:
