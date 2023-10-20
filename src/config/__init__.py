@@ -1,3 +1,3 @@
-from .config import DBConfig, GenieConfig
+from .config import GenieConfig
 
-__all__ = ["DBConfig", "GenieConfig"]
+__all__ = ["GenieConfig"]

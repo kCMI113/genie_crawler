@@ -1,7 +1,5 @@
 import os
 import logging
-import pandas as pd
-from omegaconf import DictConfig
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -17,7 +15,9 @@ def createDirectory(dir: str) -> None:
 
 
 def getLogger() -> logging.Logger:
-    return logging.getLogger()
+    logger = logging.getLogger()
+    logger.addHandler(logging.StreamHandler())
+    return logger
 
 
 def resizeImg(path: str, size: int, max_size: int) -> str:

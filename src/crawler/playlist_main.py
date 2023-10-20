@@ -8,7 +8,7 @@ PLAYLIST_ORIGIN_URL = "https://www.genie.co.kr/playlist/popular?sortOrd=RDD"
 PLAYLIST_URL = "https://www.genie.co.kr/playlist/detailView?plmSeq="
 
 
-def crawlPlaylist(config: GenieConfig) -> (pd.DataFrame, pd.DataFrame):
+def crawlPlaylist(config: GenieConfig) -> tuple[pd.DataFrame, pd.DataFrame]:
     # logger setting
     log = getLogger()
     log.propagate = False

@@ -3,8 +3,6 @@ from logging import Logger
 from bs4 import BeautifulSoup
 import requests
 
-from ..utils import resizeImg
-
 
 def crawlAlbumInfo(album_id: int, config, album_detail_url: str, log: Logger) -> dict:
     url = f"{album_detail_url}{album_id}"
