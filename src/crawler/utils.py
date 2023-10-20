@@ -1,5 +1,6 @@
 import os
 import logging
+from os import path
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -20,11 +21,11 @@ def getLogger() -> logging.Logger:
     return logger
 
 
-def resizeImg(path: str, size: int, max_size: int) -> str:
+def resizeImg(img_path: str, size: int, max_size: int) -> str:
     if size > max_size:
         raise Exception(f"[ERROR] img_resize ({size}) must be smaller than max_size ({max_size})")
     else:
-        return path + "/dims/resize/Q_" + str(size) + "," + str(size)
+        return path.join(img_path, f"dims/resize/Q_{size},{size}")
 
 
 def getLastPlaylistId(link: str) -> int:
