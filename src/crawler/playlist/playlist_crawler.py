@@ -5,6 +5,10 @@ from bs4 import BeautifulSoup
 from ..utils import resizeImg
 
 
+def validate_iamge_ext(img_path: str) -> bool:
+    return img_path.endswith(".jpg") or img_path.endswith(".jpeg") or img_path.endswith(".png")
+
+
 def getSongInfo(song_list_wrap, config, log: Logger) -> list[dict]:
     list_wrap_table = song_list_wrap.select_one(".list-wrap")
     table_tbody = list_wrap_table.find("tbody")
@@ -15,8 +19,14 @@ def getSongInfo(song_list_wrap, config, log: Logger) -> list[dict]:
 
         # IMG_path
         td_img = tr.find_all("td")[2]
+
         path_img = td_img.find("a").find("img")["src"]
-        path_img = "https:" + resizeImg(path_img[: path_img.find("/dims")], config.img_resize, config.max_resize)
+        path_img = path_img[: path_img.find("/dims")]
+
+        if not validate_iamge_ext(path_img):
+            continue
+
+        path_img = "https:" + resizeImg(path_img, config.img_resize, config.max_resize)
         all_val.append(path_img)
 
         # [song, artist, album]
